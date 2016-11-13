@@ -1,0 +1,7 @@
+#!/bin/bash
+echo "Applying sane defaults to settings database table"
+
+# piping stdin to docker-compose is broken - https://github.com/docker/compose/issues/3352
+# so use this hack to get the container name prefix based on the current working dir.
+cat etc/defaults.sql | \
+  docker exec -i `basename $PWD`_database_1 mysql --user=nzedb --password=nzedb nzedb

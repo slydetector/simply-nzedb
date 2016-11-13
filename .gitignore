@@ -1,0 +1,4 @@
+venv
+docker-compose
+data
+config.php

@@ -1,0 +1,3 @@
+#!/bin/bash
+./venv/bin/docker-compose stop --timeout 60
+./venv/bin/docker-compose rm --force

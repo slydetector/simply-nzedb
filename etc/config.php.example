@@ -1,0 +1,38 @@
+<?php
+
+// 
+// Usenet Server Config
+//
+define('NNTP_USERNAME', 'changeme');
+define('NNTP_PASSWORD', 'changeme');
+define('NNTP_SERVER', 'changeme');
+define('NNTP_PORT', 'changeme');
+define('NNTP_SSLENABLED', false);
+
+
+// 
+// Don't change anything below unless you know what you're doing :)
+//
+define('DB_SYSTEM', 'mysql');
+define('DB_HOST', 'database');
+define('DB_PORT', '3306');
+define('DB_SOCKET', '');
+define('DB_USER', 'nzedb');
+define('DB_PASSWORD', 'nzedb');
+define('DB_NAME', 'nzedb');
+define('DB_PCONNECT', false);
+
+define('NNTP_SOCKET_TIMEOUT', '120');
+
+define('NNTP_USERNAME_A', '');
+define('NNTP_PASSWORD_A', '');
+define('NNTP_SERVER_A', '');
+define('NNTP_PORT_A', '119');
+define('NNTP_SSLENABLED_A', false);
+define('NNTP_SOCKET_TIMEOUT_A', '120');
+
+define('nZEDb_SSL_CAFILE', '');
+define('nZEDb_SSL_CAPATH', '');
+define('nZEDb_SSL_VERIFY_PEER', '');
+define('nZEDb_SSL_VERIFY_HOST', '');
+define('nZEDb_SSL_ALLOW_SELF_SIGNED', '1');

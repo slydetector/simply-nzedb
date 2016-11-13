@@ -1,0 +1,3 @@
+#!/bin/bash
+./stop_nzedb
+sudo rm -rf data

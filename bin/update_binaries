@@ -1,0 +1,2 @@
+#!/bin/bash
+./venv/bin/docker-compose exec nzedb /bin/bash -c "while true; do php update_binaries.php; sleep 10; done"

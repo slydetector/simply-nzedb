@@ -1,0 +1,3 @@
+#!/bin/bash
+set -e
+while true; do ./venv/bin/docker-compose logs -f && sleep 1; done

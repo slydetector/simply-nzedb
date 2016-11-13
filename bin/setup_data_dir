@@ -1,0 +1,27 @@
+#!/bin/bash
+
+echo "Creating data directory..."
+mkdir -p data
+cp etc/config.php.example data/config.php
+mkdir -p data/covers/anime
+mkdir -p data/covers/audio
+mkdir -p data/covers/audiosample
+mkdir -p data/covers/book
+mkdir -p data/covers/console
+mkdir -p data/covers/movies
+mkdir -p data/covers/music
+mkdir -p data/covers/preview
+mkdir -p data/covers/sample
+mkdir -p data/covers/tvshows
+mkdir -p data/covers/video
+mkdir -p data/nzb
+mkdir -p data/tmp/unrar
+mkdir -p data/etc_mysql_conf.d
+mkdir -p data/var_lib_mysql
+mkdir -p data/log
+touch data/log/nginx-access.log
+touch data/log/nginx-error.log
+touch data/log/php_errors.log
+touch data/log/php-fpm.log
+chmod -R 777 data
+echo Done

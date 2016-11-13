@@ -1,0 +1,141 @@
+FROM alpine:3.4
+MAINTAINER theslydetector@gmail.com
+
+# Configure Timezone
+ENV TIMEZONE "America/Chicago"
+RUN rm -f /etc/localtime && \
+  ln -s "/usr/share/zoneinfo/${TIMEZONE}" /etc/localtime && \
+  echo "${TIMEZONE}" > /etc/timezone
+
+# Install Dependancies and Application
+RUN apk add --update \
+  curl \
+  wget \
+  git \
+  unzip \
+  tar \
+  lame \
+  p7zip \
+  file \
+  ffmpeg \
+  php5-fpm \
+  php5-dev \
+  php5-pear \
+  php5-gd \
+  php5-mysql \
+  php5-curl \
+  php5-json \
+  php5-cli \
+  php5-iconv \
+#  php5-imagick \
+  php5-pdo \
+  php5-exif \
+  php5-phar \
+  php5-openssl \
+  php5-pdo_mysql \
+  py-pip \
+  python \
+  php5-ctype \
+  nginx \
+  memcached \
+  php5-memcache \
+  musl \
+  tini \
+  tmux \
+  tree \
+  htop \
+  bash \
+  make \
+  php5-mcrypt \
+  php5-opcache \
+  php5-sockets \
+  php5-zlib \
+  unrar \
+  && \
+  rm -rf /var/cache/apk/*
+
+# Dev tools
+RUN apk add --update strace tig vim
+
+# Install composer
+RUN curl https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
+
+# Clone nZEDb and set directory permissions
+ENV NZEDB_VERSION "v0.6.5.3"
+RUN mkdir -p /var/www && \
+  cd /var/www && \
+  git clone https://github.com/nZEDb/nZEDb.git && \
+  cd /var/www/nZEDb && \
+  git checkout --quiet --force $NZEDB_VERSION && \
+  composer install && \
+	chmod -R 777 /var/www/nZEDb/ && \
+	cp /var/www/nZEDb/nzedb/config/settings.example.php /var/www/nZEDb/nzedb/config/settings.php && \
+  # nuke all git repos' .git dir except for nzedb's .git dir to save space
+  find . -name ".git" -type d | grep -v "\.\/\.git" | xargs rm -rf && \
+  # nuke ~350MB of composer cache
+  composer clear-cache
+
+# Build and install simple_php_yenc_decode
+RUN apk --update add boost-dev boost-regex gcc g++ swig && \
+  cd /tmp && \
+  git clone https://github.com/kevinlekiller/simple_php_yenc_decode && \
+  cd simple_php_yenc_decode/source && \
+  swig -php -c++ yenc_decode.i && \
+  g++ `php-config --includes` -fpic -c yenc_decode_wrap.cpp && \
+  g++ -fpic -c yenc_decode.cpp -lboost_regex && \
+  g++ -shared *.o -o simple_php_yenc_decode.so -lboost_regex && \
+  mkdir -p /usr/lib64/php/extensions && \
+  cp -p simple_php_yenc_decode.so /usr/lib64/php/extensions && \
+  sed -ri s,extension=,extension=/usr/lib64/php/extensions/simple_php_yenc_decode.so,g /etc/php5/php.ini && \
+  cd ~ && \
+  rm -rf /tmp && \
+  apk del --purge boost-dev boost-regex gcc g++ swig && \
+  rm -rf /var/cache/apk/*
+
+# Build and install mediainfo
+ENV MEDIAINFO_VERSION 0.7.90
+RUN apk --update add gcc g++ && \
+  mkdir -p /tmp && \
+  cd /tmp && \
+  curl -s -o mediainfo.tar.gz \
+    https://mediaarea.net/download/binary/mediainfo/${MEDIAINFO_VERSION}/MediaInfo_CLI_${MEDIAINFO_VERSION}_GNU_FromSource.tar.gz && \
+  tar xzvf mediainfo.tar.gz && \
+  cd MediaInfo_CLI_GNU_FromSource && \
+  ./CLI_Compile.sh && \
+  cd MediaInfo/Project/GNU/CLI && \
+  make install && \
+  cd / && \
+  rm -rf /tmp && \
+  apk del --purge gcc g++ && \
+  rm -rf /var/cache/apk/*
+  
+# Install Python MySQL Modules
+RUN pip install --upgrade pip && \
+  pip install --upgrade setuptools && \
+  pip install cymysql pynntp socketpool
+
+# Configure PHP
+RUN sed -ri 's/(max_execution_time =) ([0-9]+)/\1 120/' /etc/php5/php.ini && \
+  sed -ri 's/(memory_limit =) ([0-9]+)/\1 -1/' /etc/php5/php.ini && \
+  sed -ri 's/;(date.timezone =)/\1 America\/Chicago/' /etc/php5/php.ini && \
+  sed -ri 's/;*listen\s*=\s*127.0.0.1:9000/listen = 9000/g' /etc/php5/php-fpm.conf && \
+  mkdir -p /var/log/php-fpm/
+
+# Install and configure nginx.
+RUN mkdir -p /var/log/nginx && \
+    mkdir -p /etc/nginx && \
+    mkdir -p /tmp/nginx && \
+    chmod 755 /var/log/nginx && \
+    chmod 777 /tmp && \
+    touch /var/log/nginx/nginx-error.log
+ADD nginx.conf /etc/nginx/nginx.conf
+
+# Expose Ports
+EXPOSE 8800
+
+# Default Command To Run
+RUN mkdir /opt
+ADD start /opt/start
+RUN chmod a+x /opt/start
+CMD ["/sbin/tini","-v","-g","--","/opt/start"] 
+WORKDIR /var/www/nZEDb/misc/update
