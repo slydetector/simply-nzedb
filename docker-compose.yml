@@ -1,0 +1,45 @@
+version: '2'
+services:
+
+  database:
+    build: mariadb
+    restart: unless-stopped
+    volumes:
+      - $PWD/data/var_lib_mysql:/var/lib/mysql
+      - $PWD/data/etc_mysql_conf.d:/etc/mysql/conf.d
+    environment:
+      - MYSQL_ROOT_PASSWORD=nzedb
+      - MYSQL_DATABASE=nzedb
+      - MYSQL_USER=nzedb
+      - MYSQL_PASSWORD=nzedb
+    expose:
+      - "3306"
+
+  nzedb:
+    build: nzedb
+    restart: unless-stopped
+    links:
+      - database
+    ports:
+      - 8800:8800
+    depends_on:
+      - database
+    volumes:
+      - $PWD/data/covers:/var/www/nZEDb/resources/covers/
+      - $PWD/data/nzb:/var/www/nZEDb/resources/nzb/
+      - $PWD/data/tmp:/var/www/nZEDb/resources/tmp/unrar/
+      - $PWD/data/config.php:/var/www/nZEDb/nzedb/config/config.php
+      - $PWD/data/log/nginx-error.log:/var/log/nginx/nginx-error.log
+      - $PWD/data/log/nginx-access.log:/var/log/nginx/access.log
+      - $PWD/data/log/php-fpm.log:/var/log/php-fpm.log
+      - $PWD/data/log/php_errors.log:/var/www/nZEDb/resources/logs/php_errors.log
+
+  adminer:
+    image: clue/adminer
+    restart: unless-stopped
+    links: 
+      - database:db
+    ports: 
+      - 8880:80
+    depends_on:
+      - database
