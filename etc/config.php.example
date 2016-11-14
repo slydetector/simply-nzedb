@@ -3,10 +3,10 @@
 // 
 // Usenet Server Config
 //
-define('NNTP_USERNAME', 'changeme');
-define('NNTP_PASSWORD', 'changeme');
-define('NNTP_SERVER', 'changeme');
-define('NNTP_PORT', 'changeme');
+define('NNTP_USERNAME', 'changeme_nntp_username');
+define('NNTP_PASSWORD', 'changeme_nntp_password');
+define('NNTP_SERVER', 'changeme_nntp_server');
+define('NNTP_PORT', 'changeme_nntp_port');
 define('NNTP_SSLENABLED', false);
 
 
