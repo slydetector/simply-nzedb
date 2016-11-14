@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/slydetector/simply-nzedb.svg?branch=master)](https://travis-ci.org/slydetector/simply-nzedb)
+
 # Simply nZEDb
 
 Set up your own nZEDb usenet indexer in no time at all. 
