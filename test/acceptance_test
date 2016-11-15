@@ -133,11 +133,13 @@ step2_web_setup() {
 }
 
 step3_sane_defaults() {
-  echo "TODO: sane defaults"
+  bin/apply_defaults
 }
 
 step4_verification() {
-  echo "TODO: verification"
+  # TODO: -T needed until https://github.com/docker/compose/issues/3379 is fixed
+  venv/bin/docker-compose exec -T nzedb php update_binaries.php
+  venv/bin/docker-compose exec -T nzedb php update_releases.php 1 true
 }
 
 post_test_cleanup() {
