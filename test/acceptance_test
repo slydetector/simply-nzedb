@@ -47,7 +47,7 @@ step2_web_setup() {
 
   # TODO: db needs time to start up and initialize for the first time.
   #       sleeps are flakey - poll/retry in loop instead
-  sleep 30
+  sleep 30 
 
   venv_test/bin/http \
     --session=test \
@@ -63,6 +63,73 @@ step2_web_setup() {
       pass=nzedb \
       db=nzedb | \
     grep "The database setup is correct"
+
+  venv_test/bin/http --session test --check-status :8800/install/step3.php | \
+    grep "OpenSSL Setup"
+  
+  venv_test/bin/http \
+    --session=test \
+    --check-status \
+    --follow \
+    --form \
+    --all :8800/install/step3.php \
+      cafile="" \
+      capath="" | \
+    grep "The openssl setup looks correct"
+
+  venv_test/bin/http --session test --check-status :8800/install/step4.php | \
+    grep "News Server Setup"
+
+  venv_test/bin/http \
+    --session=test \
+    --check-status \
+    --follow \
+    --form \
+    --all :8800/install/step4.php \
+      server=freenews.netfront.net \
+      user="" \
+      pass="" \
+      port=119 \
+      socket_timeout=120 \
+      servera="" \
+      usera="" \
+      passa="" \
+      porta=119 \
+      socket_timeouta=120 | \
+    grep "The news server setup is correct"
+  
+  venv_test/bin/http --session test --check-status :8800/install/step5.php | \
+    grep "Save Settings"
+  
+  venv_test/bin/http --session test --check-status :8800/install/step6.php | \
+    grep "Setup Admin User"
+
+  venv_test/bin/http \
+    --session=test \
+    --check-status \
+    --follow \
+    --form \
+    --all :8800/install/step6.php \
+      user=nzedb \
+      fname="" \
+      lname="" \
+      pass=nzedb \
+      email="me@localhost.com" | \
+    grep "The admin user has been setup"
+
+  venv_test/bin/http --session test --check-status :8800/install/step7.php | \
+    grep "File Paths"
+
+  venv_test/bin/http \
+    --session=test \
+    --check-status \
+    --follow \
+    --form \
+    --all :8800/install/step7.php \
+      coverspath="/var/www/nZEDb/resources/covers/" \
+      nzbpath="/var/www/nZEDb/resources/nzb/" \
+      tmpunrarpath="/var/www/nZEDb/resources/tmp/unrar/" | \
+    grep "Install Complete"
 }
 
 step3_sane_defaults() {
