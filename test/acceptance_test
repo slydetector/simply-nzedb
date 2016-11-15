@@ -45,6 +45,10 @@ step2_web_setup() {
   venv_test/bin/http --session test --check-status :8800/install/step2.php | \
     grep "Database Setup"
 
+  # TODO: db needs time to start up and initialize for the first time.
+  #       sleeps are flakey - poll/retry in loop instead
+  sleep 30
+
   venv_test/bin/http \
     --session=test \
     --check-status \
@@ -57,7 +61,8 @@ step2_web_setup() {
       sql_socket="" \
       user=nzedb \
       pass=nzedb \
-      db=nzedb
+      db=nzedb | \
+    grep "The database setup is correct"
 }
 
 step3_sane_defaults() {
