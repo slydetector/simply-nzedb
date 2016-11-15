@@ -7,6 +7,7 @@ services:
     volumes:
       - $PWD/data/var_lib_mysql:/var/lib/mysql
       - $PWD/data/etc_mysql_conf.d:/etc/mysql/conf.d
+      - $PWD/data/mysql_user:/mysql_user
     environment:
       - MYSQL_ROOT_PASSWORD=nzedb
       - MYSQL_DATABASE=nzedb

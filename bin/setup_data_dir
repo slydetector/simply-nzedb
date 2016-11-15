@@ -23,5 +23,9 @@ touch data/log/nginx-access.log
 touch data/log/nginx-error.log
 touch data/log/php_errors.log
 touch data/log/php-fpm.log
+cat << EOF > data/mysql_user
+PUID=$(id --user)
+PGID=$(id --group)
+EOF
 chmod -R 777 data
 echo Done
