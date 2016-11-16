@@ -1,7 +1,10 @@
 #!/bin/bash
 echo "Applying sane defaults to settings database table"
 
+# docker-compose removes dashes from the container name prefix for some reason
+prefix=$(basename $PWD | sed "s/-//g")
+
 # piping stdin to docker-compose is broken - https://github.com/docker/compose/issues/3352
 # so use this hack to get the container name prefix based on the current working dir.
 cat etc/defaults.sql | \
-  docker exec -i `basename $PWD`_database_1 mysql --user=nzedb --password=nzedb nzedb
+  docker exec -i ${prefix}_database_1 mysql --user=nzedb --password=nzedb nzedb

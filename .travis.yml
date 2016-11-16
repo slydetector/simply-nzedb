@@ -4,5 +4,4 @@ services:
   - docker
 
 script:
-  - bin/build_virtualenv
-  - bin/build_nzedb
+  - test/acceptance_test
