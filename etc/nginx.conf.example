@@ -20,7 +20,7 @@ http {
   client_max_body_size 2G;
   
   server {
-
+    server_name   changeme_server_name localhost;  
     #listen       [::]:80; #uncomment for IPv6 support
     listen       8800;
     

@@ -34,6 +34,7 @@ services:
       - $PWD/data/log/nginx-access.log:/var/log/nginx/access.log
       - $PWD/data/log/php-fpm.log:/var/log/php-fpm.log
       - $PWD/data/log/php_errors.log:/var/www/nZEDb/resources/logs/php_errors.log
+      - $PWD/data/nginx.conf:/etc/nginx/nginx.conf
 
   adminer:
     image: clue/adminer

@@ -3,6 +3,8 @@
 echo "Creating data directory..."
 mkdir -p data
 cp etc/config.php.example data/config.php
+cp etc/nginx.conf.example data/nginx.conf
+sed -ri "s/changeme_server_name/$(hostname)/g" data/nginx.conf
 mkdir -p data/covers/anime
 mkdir -p data/covers/audio
 mkdir -p data/covers/audiosample
