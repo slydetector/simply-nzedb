@@ -27,7 +27,7 @@ RUN apk add --update \
   php5-json \
   php5-cli \
   php5-iconv \
-#  php5-imagick \
+  php5-imagick \
   php5-pdo \
   php5-exif \
   php5-phar \
@@ -59,21 +59,6 @@ RUN apk add --update strace tig vim
 
 # Install composer
 RUN curl https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
-
-# Clone nZEDb and set directory permissions
-ENV NZEDB_VERSION "v0.6.5.3"
-RUN mkdir -p /var/www && \
-  cd /var/www && \
-  git clone https://github.com/nZEDb/nZEDb.git && \
-  cd /var/www/nZEDb && \
-  git checkout --quiet --force $NZEDB_VERSION && \
-  composer install && \
-	chmod -R 777 /var/www/nZEDb/ && \
-	cp /var/www/nZEDb/nzedb/config/settings.example.php /var/www/nZEDb/nzedb/config/settings.php && \
-  # nuke all git repos' .git dir except for nzedb's .git dir to save space
-  find . -name ".git" -type d | grep -v "\.\/\.git" | xargs rm -rf && \
-  # nuke ~350MB of composer cache
-  composer clear-cache
 
 # Build and install simple_php_yenc_decode
 RUN apk --update add boost-dev boost-regex gcc g++ swig && \
@@ -128,7 +113,23 @@ RUN mkdir -p /var/log/nginx && \
     chmod 755 /var/log/nginx && \
     chmod 777 /tmp && \
     touch /var/log/nginx/nginx-error.log
-ADD nginx.conf /etc/nginx/nginx.conf
+#ADD nginx.conf /etc/nginx/nginx.conf
+
+
+# Clone nZEDb and set directory permissions
+ENV NZEDB_VERSION "v0.6.5.3"
+RUN mkdir -p /var/www && \
+  cd /var/www && \
+  git clone https://github.com/nZEDb/nZEDb.git && \
+  cd /var/www/nZEDb && \
+  git checkout --quiet --force $NZEDB_VERSION && \
+  composer install && \
+	chmod -R 777 /var/www/nZEDb/ && \
+	cp /var/www/nZEDb/nzedb/config/settings.example.php /var/www/nZEDb/nzedb/config/settings.php && \
+  # nuke all git repos' .git dir except for nzedb's .git dir to save space
+  find . -name ".git" -type d | grep -v "\.\/\.git" | xargs rm -rf && \
+  # nuke ~350MB of composer cache
+  composer clear-cache
 
 # Expose Ports
 EXPOSE 8800
