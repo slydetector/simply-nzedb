@@ -14,6 +14,9 @@ This is a docker based installation based on the super-slim alpine linux distro.
 
 ## Installation
 ### Step 1 - Command line setup
+
+**ProTip:** Setup docker to run [without having to use sudo](http://askubuntu.com/questions/477551/how-can-i-use-docker-without-sudo) unless you like typing in your password again and again.
+
 ```sh
 git clone https://github.com/slydetector/simply-nzedb.git nzedb
 cd nzedb
