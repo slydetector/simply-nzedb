@@ -36,11 +36,11 @@ RUN apk add --update \
   py-pip \
   python \
   php5-ctype \
+  s6 \
   nginx \
   memcached \
   php5-memcache \
   musl \
-  tini \
   tmux \
   tree \
   htop \
@@ -131,12 +131,7 @@ RUN mkdir -p /var/www && \
   # nuke ~350MB of composer cache
   composer clear-cache
 
-# Expose Ports
 EXPOSE 8800
-
-# Default Command To Run
-RUN mkdir /opt
-ADD start /opt/start
-RUN chmod a+x /opt/start
-CMD ["/sbin/tini","-v","-g","--","/opt/start"] 
+ADD s6 /etc/s6
+CMD ["/bin/s6-svscan","/etc/s6"]
 WORKDIR /var/www/nZEDb/misc/update
