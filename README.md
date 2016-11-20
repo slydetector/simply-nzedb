@@ -62,18 +62,27 @@ bin/start_nzedb
 # Update settings db table with locations of various executables like ffmpeg, mediainfo, etc
 # and subscribe to alt.binaries.teevee for verification
 bin/apply_defaults
+
+# Restart to pick up changes
+bin/start_nzedb
 ```
 
 ### Step 4 - Verification
 ```sh
-# Update binaries from alt.binaries.teevee. Let this run for about a minute and then Ctrl-C it.
-bin/update_binaries
-
-# Update releases and post-process (nfo, preview, lookups, media info, etc).
-# Run for about a minute and then Ctrl-C it
-bin/update_releases
+# Attach to tmux and verify things are working by
+# next'ing through the windows.
+#
+# Cheat sheet for getting around in tmux:
+#
+# Key         Action
+# --------------------------------------
+# Ctrl-a n    Next window
+# Ctrl-a c    Create new window
+# Ctrl-a d    Detach from tmux
+# 
+bin/attach_tmux
 ```
-Go to ```http://<hostname>:8800/browse?t=5000``` and you should see some TV releases.
+Go to ```http://<hostname>:8800/browse?t=5000``` and you should see some TV releases soon.
 
 Congratulations, you've just accomplished the hardest part of running nZEDb, setting it up!
 
