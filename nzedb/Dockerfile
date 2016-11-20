@@ -9,6 +9,7 @@ RUN rm -f /etc/localtime && \
 
 # Install Dependancies and Application
 RUN apk add --update \
+  bwm-ng \
   curl \
   wget \
   git \
@@ -18,6 +19,8 @@ RUN apk add --update \
   p7zip \
   file \
   ffmpeg \
+  iproute2 \
+  mariadb-client \
   php5-fpm \
   php5-dev \
   php5-pear \
@@ -32,6 +35,7 @@ RUN apk add --update \
   php5-exif \
   php5-phar \
   php5-openssl \
+  php5-pcntl \
   php5-pdo_mysql \
   py-pip \
   python \
@@ -41,7 +45,6 @@ RUN apk add --update \
   memcached \
   php5-memcache \
   musl \
-  tmux \
   tree \
   htop \
   bash \
@@ -53,6 +56,8 @@ RUN apk add --update \
   unrar \
   && \
   rm -rf /var/cache/apk/*
+
+# vnstat in testing repo
 
 # Dev tools
 RUN apk add --update strace tig vim
@@ -93,7 +98,8 @@ RUN apk --update add gcc g++ && \
   rm -rf /tmp && \
   apk del --purge gcc g++ && \
   rm -rf /var/cache/apk/*
-  
+
+
 # Install Python MySQL Modules
 RUN pip install --upgrade pip && \
   pip install --upgrade setuptools && \
@@ -113,8 +119,6 @@ RUN mkdir -p /var/log/nginx && \
     chmod 755 /var/log/nginx && \
     chmod 777 /tmp && \
     touch /var/log/nginx/nginx-error.log
-#ADD nginx.conf /etc/nginx/nginx.conf
-
 
 # Clone nZEDb and set directory permissions
 ENV NZEDB_VERSION "v0.6.5.3"
@@ -131,6 +135,23 @@ RUN mkdir -p /var/www && \
   # nuke ~350MB of composer cache
   composer clear-cache
 
+# Build tmux 2.0 since tmux 2.2 has issues: https://github.com/nZEDb/nZEDb/issues/2182 
+ENV TMUX_VERSION 2.0
+RUN apk --update add gcc g++ ncurses-dev libevent-dev bsd-compat-headers && \
+  mkdir -p /tmp/tmux && \
+  cd /tmp/tmux && \
+  curl --location -o tmux.tar.gz https://github.com/tmux/tmux/releases/download/${TMUX_VERSION}/tmux-${TMUX_VERSION}.tar.gz && \
+  tar xzvf tmux.tar.gz && \
+  cd tmux-${TMUX_VERSION} && \
+  ./configure --prefix /usr && \
+  make && \
+  make install && \
+  cd / && \
+  rm -rf /tmp/tmux && \
+  apk del --purge gcc g++ ncurses-dev libevent-dev bsd-compat-headers && \
+  rm -rf /var/cache/apk
+
+ENV TERM tmux
 EXPOSE 8800
 ADD s6 /etc/s6
 CMD ["/bin/s6-svscan","/etc/s6"]

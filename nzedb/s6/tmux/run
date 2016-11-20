@@ -1,0 +1,3 @@
+#!/bin/sh
+cd /var/www/nZEDb/misc/update/nix/tmux
+exec php start.php
