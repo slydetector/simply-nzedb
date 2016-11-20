@@ -3,8 +3,13 @@
 echo "Creating data directory..."
 mkdir -p data
 cp etc/config.php.example data/config.php
+
 cp etc/nginx.conf.example data/nginx.conf
 sed -ri "s/changeme_server_name/$(hostname)/g" data/nginx.conf
+
+# Will end up mounted to /root/.mytop
+cp etc/mytop data/mytop
+
 mkdir -p data/covers/anime
 mkdir -p data/covers/audio
 mkdir -p data/covers/audiosample
@@ -21,13 +26,18 @@ mkdir -p data/tmp/unrar
 mkdir -p data/etc_mysql_conf.d
 mkdir -p data/var_lib_mysql
 mkdir -p data/log
+
+# Create as files otherwise docker will mount as directories 
 touch data/log/nginx-access.log
 touch data/log/nginx-error.log
 touch data/log/php_errors.log
 touch data/log/php-fpm.log
+
+# File that lets mysql container know user id/gid on host
 cat << EOF > data/mysql_user
 PUID=$(id --user)
 PGID=$(id --group)
 EOF
+
 chmod -R 777 data
 echo Done

@@ -59,6 +59,15 @@ RUN apk add --update \
 
 # vnstat in testing repo
 
+# mytop + deps
+RUN apk add --update \
+  mariadb \
+  perl \
+  perl-dbd-mysql \
+  perl-term-readkey \
+  && \
+  rm -rf /var/cache/apk/*
+
 # Dev tools
 RUN apk add --update strace tig vim
 
@@ -149,7 +158,7 @@ RUN apk --update add gcc g++ ncurses-dev libevent-dev bsd-compat-headers && \
   cd / && \
   rm -rf /tmp/tmux && \
   apk del --purge gcc g++ ncurses-dev libevent-dev bsd-compat-headers && \
-  rm -rf /var/cache/apk
+  rm -rf /var/cache/apk/*
 
 ENV TERM tmux
 EXPOSE 8800
