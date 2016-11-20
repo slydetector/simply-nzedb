@@ -4,4 +4,4 @@ services:
   - docker
 
 script:
-  - test/acceptance_test
+  - bin/acceptance_test
