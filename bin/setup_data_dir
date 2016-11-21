@@ -39,5 +39,9 @@ PUID=$(id --user)
 PGID=$(id --group)
 EOF
 
+# Save predb import progress across container start/stop.
+# Written by predb_import_daily_batch.php
+touch data/predb_progress.txt
+
 chmod -R 777 data
 echo Done
