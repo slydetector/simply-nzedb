@@ -6,7 +6,7 @@ Set up your own nZEDb usenet indexer in no time at all.
 This is a docker based installation based on the super-slim alpine linux distro.
 
 ## Requirements
-- Linux box (64-bit distro - Debian, Ubuntu, whatever)
+- Linux box (64-bit x86 based distro - Debian, Ubuntu, whatever)
 - [docker 1.11+](https://docs.docker.com/engine/installation/)
 - python 2.7
 - [virtualenv](https://virtualenv.pypa.io/en/stable/installation/)
