@@ -1,5 +1,4 @@
 #!/bin/bash
-
 echo "Creating data directory..."
 mkdir -p data
 cp etc/config.php.example data/config.php
@@ -26,6 +25,7 @@ mkdir -p data/tmp/unrar
 mkdir -p data/etc_mysql_conf.d
 mkdir -p data/var_lib_mysql
 mkdir -p data/log
+mkdir -p data/import/inbox
 
 # Create as files otherwise docker will mount as directories 
 touch data/log/nginx-access.log
