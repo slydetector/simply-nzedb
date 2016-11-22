@@ -160,6 +160,9 @@ RUN apk --update add gcc g++ ncurses-dev libevent-dev bsd-compat-headers && \
   apk del --purge gcc g++ ncurses-dev libevent-dev bsd-compat-headers && \
   rm -rf /var/cache/apk/*
 
+# Create dir for importing nzbs
+RUN mkdir -p /var/www/nZEDb/resources/import
+
 ENV TERM tmux
 EXPOSE 8800
 ADD s6 /etc/s6

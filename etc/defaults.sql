@@ -23,3 +23,10 @@ update tmux set value=1 where setting="post_non";
 update tmux set value=1 where setting="fix_names";
 update tmux set value=1 where setting="mytop";
 update tmux set value=1 where setting="console";
+
+# 0 = Disabled
+# 1 = Import - Do not use filenames
+# 2 = Import - Use filenames
+update tmux set value=1 where setting="import";
+update tmux set value="/var/www/nZEDb/resources/import" where setting="nzbs";
+
