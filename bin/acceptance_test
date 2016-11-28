@@ -1,14 +1,8 @@
 #!/bin/bash -xv
 set -e
 
-pre_test_cleanup() {
-  rm -rf venv data venv_test
-}
-
 pre_test_setup() {
-  rm -rf venv data venv_test
-  virtualenv -p python2.7 venv_test
-  venv_test/bin/pip install -r etc/requirements-test.txt
+  rm -rf venv data
 }
 
 create_simply_nzedb_conf() {
@@ -19,11 +13,23 @@ NNTP_SERVER=freenews.netfront.net
 NNTP_PORT=119
 NNTP_SSLENABLED=false
 
+DB_SYSTEM=mysql
+DB_HOST=database
+DB_PORT=3306
+DB_SOCKET=""
+DB_USER=nzedb
+DB_PASSWORD=nzedb
+DB_NAME=nzedb
+
 IRC_USERNAME=simply_nzedb_test
 IRC_SERVER=irc.idontexist.com
 IRC_PORT=6667
 IRC_TLS=false
 IRC_PASSWORD=""
+
+NZEDB_ADMIN_USERNAME=nzedb
+NZEDB_ADMIN_PASSWORD=nzedb
+NZEDB_ADMIN_EMAIL=nzedb@localhost.com
 EOF
 }
 
@@ -37,106 +43,18 @@ step1_cli_setup() {
 
 step1_test() {
   # nzedb is up
-  venv_test/bin/http --session test --check-status :8800/install/
+  venv/bin/http --session test --check-status :8800/install/
   
   # adminer is up - needs to be poked twice to pass
   # TODO: Figure out why it always fails on the first poke
-  # venv_test/bin/http :8880/
-  # venv_test/bin/http --check-status :8880/
+  # venv/bin/http :8880/
+  # venv/bin/http --check-status :8880/
 }
 
 step2_web_setup() {
-  venv_test/bin/http --session test --check-status :8800/install/step1.php | \
-    grep "No problems were found and you are ready to install"
-
-  venv_test/bin/http --session test --check-status :8800/install/step2.php | \
-    grep "Database Setup"
-
-  # TODO: db needs time to start up and initialize for the first time.
-  #       sleeps are flakey - poll/retry in loop instead
-  sleep 30 
-
-  venv_test/bin/http \
-    --session=test \
-    --check-status \
-    --follow \
-    --form \
-    --all :8800/install/step2.php \
-      db_system=mysql \
-      host=database \
-      sql_port=3306 \
-      sql_socket="" \
-      user=nzedb \
-      pass=nzedb \
-      db=nzedb | \
-    grep "The database setup is correct"
-
-  venv_test/bin/http --session test --check-status :8800/install/step3.php | \
-    grep "OpenSSL Setup"
-  
-  venv_test/bin/http \
-    --session=test \
-    --check-status \
-    --follow \
-    --form \
-    --all :8800/install/step3.php \
-      cafile="" \
-      capath="" | \
-    grep "The openssl setup looks correct"
-
-  venv_test/bin/http --session test --check-status :8800/install/step4.php | \
-    grep "News Server Setup"
-
-  venv_test/bin/http \
-    --session=test \
-    --check-status \
-    --follow \
-    --form \
-    --all :8800/install/step4.php \
-      server=freenews.netfront.net \
-      user="" \
-      pass="" \
-      port=119 \
-      socket_timeout=120 \
-      servera="" \
-      usera="" \
-      passa="" \
-      porta=119 \
-      socket_timeouta=120 | \
-    grep "The news server setup is correct"
-  
-  venv_test/bin/http --session test --check-status :8800/install/step5.php | \
-    grep "Save Settings"
-  
-  venv_test/bin/http --session test --check-status :8800/install/step6.php | \
-    grep "Setup Admin User"
-
-  venv_test/bin/http \
-    --session=test \
-    --check-status \
-    --follow \
-    --form \
-    --all :8800/install/step6.php \
-      user=nzedb \
-      fname="" \
-      lname="" \
-      pass=nzedb \
-      email="me@localhost.com" | \
-    grep "The admin user has been setup"
-
-  venv_test/bin/http --session test --check-status :8800/install/step7.php | \
-    grep "File Paths"
-
-  venv_test/bin/http \
-    --session=test \
-    --check-status \
-    --follow \
-    --form \
-    --all :8800/install/step7.php \
-      coverspath="/var/www/nZEDb/resources/covers/" \
-      nzbpath="/var/www/nZEDb/resources/nzb/" \
-      tmpunrarpath="/var/www/nZEDb/resources/tmp/unrar/" | \
-    grep "Install Complete"
+  source etc/simply_nzedb.conf
+  source bin/nzedb_lib
+  web_setup
 }
 
 step3_sane_defaults() {

@@ -1,0 +1,6 @@
+user=changeme_db_user
+pass=changeme_db_password
+host=changeme_db_host
+db=changeme_db_name
+delay=1
+port=changeme_db_port

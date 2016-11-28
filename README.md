@@ -40,25 +40,12 @@ bin/setup_data_dir
 bin/start_nzedb
 ```
 
-### Step 2 - Web based setup
-- In your web browser, go to `http://<hostname>:8800/install/`
-- Read instructions and press **Go to step one: Pre flight check**
-- All checks should be OK (green). Press **Step two: setup the database**
-- Database Setup page - all required settings should already be populated. Press **Setup Database**
-- Press **Step three: Setup openssl**
-- Press **Verify openssl settings**
-- Press **Step four: Setup news server connection**
-- Usenet server settings should already be pre-populated from Step 1. Press **Test Primary Connection**
-- Press **Step five: Save Settings**
-- Press **Step six: Setup admin user**
-- Admin user 
-  - Enter `Username: nzedb`
-  - Enter `Password: nzedb`
-  - Enter `Email: your@email.address.com`
-  - Press **Create Admin User**
-- Press **Step seven: Set file paths**
-- Leave pre-populated defaults - press **Set file paths**
-- Nearly there..
+### Step 2 - Automated web setup
+```sh
+# This will run through the web setup for you using settings from simply_nzedb.conf/
+# Logs are in web_setup.log
+bin/web_setup
+```
 
 ### Step 3 - Sane defaults
 ```sh

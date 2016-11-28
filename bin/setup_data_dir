@@ -6,17 +6,33 @@ mkdir -p data
 source etc/simply_nzedb.conf
 
 cp etc/config.php.example data/config.php
-sed -ri "s/changeme_nntp_username/${NNTP_USERNAME}/g" data/config.php
-sed -ri "s/changeme_nntp_password/${NNTP_PASSWORD}/g" data/config.php
-sed -ri "s/changeme_nntp_server/${NNTP_SERVER}/g" data/config.php
-sed -ri "s/changeme_nntp_port/${NNTP_PORT}/g" data/config.php
-sed -ri "s/changeme_nntp_sslenabled/${NNTP_SSLENABLED}/g" data/config.php
+target="data/config.php"
+sed -ri "s/changeme_nntp_username/${NNTP_USERNAME}/g" $target
+sed -ri "s/changeme_nntp_password/${NNTP_PASSWORD}/g" $target
+sed -ri "s/changeme_nntp_server/${NNTP_SERVER}/g" $target
+sed -ri "s/changeme_nntp_port/${NNTP_PORT}/g" $target
+sed -ri "s/changeme_nntp_sslenabled/${NNTP_SSLENABLED}/g" $target
+
+sed -ri "s/changeme_db_system/${DB_SYSTEM}/g" $target
+sed -ri "s/changeme_db_host/${DB_HOST}/g" $target
+sed -ri "s/changeme_db_port/${DB_PORT}/g" $target
+sed -ri "s/changeme_db_socket/${DB_SOCKET}/g" $target
+sed -ri "s/changeme_db_user/${DB_USER}/g" $target
+sed -ri "s/changeme_db_password/${DB_PASSWORD}/g" $target
+sed -ri "s/changeme_db_name/${DB_NAME}/g" $target
 
 cp etc/nginx.conf.example data/nginx.conf
 sed -ri "s/changeme_server_name/$(hostname)/g" data/nginx.conf
 
 # Will end up mounted to /root/.mytop
-cp etc/mytop data/mytop
+cp etc/mytop.example data/mytop
+target="data/mytop"
+sed -ri "s/changeme_db_system/${DB_SYSTEM}/g" $target
+sed -ri "s/changeme_db_host/${DB_HOST}/g" $target
+sed -ri "s/changeme_db_port/${DB_PORT}/g" $target
+sed -ri "s/changeme_db_user/${DB_USER}/g" $target
+sed -ri "s/changeme_db_password/${DB_PASSWORD}/g" $target
+sed -ri "s/changeme_db_name/${DB_NAME}/g" $target
 
 mkdir -p data/covers/anime
 mkdir -p data/covers/audio

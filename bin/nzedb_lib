@@ -1,0 +1,101 @@
+DELAY=1
+FLAGS="--session test --check-status --follow --verbose --debug"
+TEE="tee --append web_setup.log"
+HTTP="venv/bin/http $FLAGS"
+
+web_setup() {
+  echo "Step 0"
+  $HTTP :8800/install/ |& $TEE | grep "Pre flight check"
+
+  echo "Step 1"
+  $HTTP :8800/install/step1.php |& $TEE | grep "No problems were found and you are ready to install"
+  sleep $DELAY
+
+  echo "Step 2"
+  $HTTP :8800/install/step2.php |& $TEE | grep "Database Setup"
+  sleep $DELAY
+
+  # TODO: db needs time to start up and initialize for the first time.
+  #       sleeps are flakey - poll/retry in loop instead
+  echo "Waiting for db to start.."
+  sleep 30 
+  echo "Connecting to db.."
+
+  $HTTP \
+    --form \
+    --all :8800/install/step2.php \
+      db_system=${DB_SYSTEM} \
+      host=${DB_HOST} \
+      sql_port=${DB_PORT} \
+      sql_socket=${DB_SOCKET} \
+      user=${DB_USER} \
+      pass=${DB_PASSWORD} \
+      db=${DB_NAME} |& $TEE | \
+    grep "The database setup is correct"
+  sleep $DELAY
+
+  echo "Step 3"
+  $HTTP :8800/install/step3.php |& $TEE | grep "OpenSSL Setup"
+  
+  $HTTP \
+    --form \
+    --all :8800/install/step3.php \
+      cafile="" \
+      capath="" |& $TEE | \
+    grep "The openssl setup looks correct"
+  sleep $DELAY
+
+  echo "Step 4"
+  $HTTP :8800/install/step4.php |& $TEE | grep "News Server Setup"
+
+  NNTP_SSL=0
+  if [ ${NNTP_SSLENABLED} = "true" ]; then
+    NNTP_SSL=1
+  fi
+
+  $HTTP \
+    --form \
+    --all :8800/install/step4.php \
+      server=${NNTP_SERVER} \
+      user=${NNTP_USERNAME} \
+      pass=${NNTP_PASSWORD} \
+      port=${NNTP_PORT} \
+      ssl=${NNTP_SSL} \
+      socket_timeout=120 \
+      servera="" \
+      usera="" \
+      passa="" \
+      porta=119 \
+      socket_timeouta=120 |& $TEE | \
+    grep "The news server setup is correct"
+  sleep $DELAY
+  
+  echo "Step 5"
+  $HTTP :8800/install/step5.php |& $TEE | grep "Save Settings"
+  sleep $DELAY
+  
+  echo "Step 6"
+  $HTTP :8800/install/step6.php |& $TEE | grep "Setup Admin User"
+
+  $HTTP \
+    --form \
+    --all :8800/install/step6.php \
+      user=${NZEDB_ADMIN_USERNAME} \
+      fname="" \
+      lname="" \
+      pass=${NZEDB_ADMIN_PASSWORD} \
+      email=${NZEDB_ADMIN_EMAIL} |& $TEE | \
+    grep "The admin user has been setup"
+  sleep $DELAY
+
+  echo "Step 7"
+  $HTTP :8800/install/step7.php |& $TEE | grep "File Paths"
+
+  $HTTP \
+    --form \
+    --all :8800/install/step7.php \
+      coverspath="/var/www/nZEDb/resources/covers/" \
+      nzbpath="/var/www/nZEDb/resources/nzb/" \
+      tmpunrarpath="/var/www/nZEDb/resources/tmp/unrar/" |& $TEE | \
+    grep "Install Complete"
+}

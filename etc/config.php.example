@@ -1,5 +1,5 @@
 <?php
-
+// Do not change this file.
 // 
 // Usenet Server Config
 //
@@ -10,16 +10,13 @@ define('NNTP_PORT', 'changeme_nntp_port');
 define('NNTP_SSLENABLED', changeme_nntp_sslenabled);
 
 
-// 
-// Don't change anything below unless you know what you're doing :)
-//
-define('DB_SYSTEM', 'mysql');
-define('DB_HOST', 'database');
-define('DB_PORT', '3306');
-define('DB_SOCKET', '');
-define('DB_USER', 'nzedb');
-define('DB_PASSWORD', 'nzedb');
-define('DB_NAME', 'nzedb');
+define('DB_SYSTEM', 'changeme_db_system');
+define('DB_HOST', 'changeme_db_host');
+define('DB_PORT', 'changeme_db_port');
+define('DB_SOCKET', 'changeme_db_socket');
+define('DB_USER', 'changeme_db_user');
+define('DB_PASSWORD', 'changeme_db_password');
+define('DB_NAME', 'changeme_db_name');
 define('DB_PCONNECT', false);
 
 define('NNTP_SOCKET_TIMEOUT', '120');
