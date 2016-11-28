@@ -11,20 +11,27 @@ pre_test_setup() {
   venv_test/bin/pip install -r etc/requirements-test.txt
 }
 
-use_fake_nntp_creds() {
-  echo "Using fake nntp creds"
-  sed -ri "s/changeme_nntp_username//g" data/config.php
-  sed -ri "s/changeme_nntp_password//g" data/config.php
-  sed -ri "s/changeme_nntp_server/freenews.netfront.net/g" data/config.php
-  sed -ri "s/changeme_nntp_port/119/g" data/config.php
-  head data/config.php
+create_simply_nzedb_conf() {
+  cat << EOF > etc/simply_nzedb.conf
+NNTP_USERNAME=""
+NNTP_PASSWORD=""
+NNTP_SERVER=freenews.netfront.net
+NNTP_PORT=119
+NNTP_SSLENABLED=false
+
+IRC_USERNAME=simply_nzedb_test
+IRC_SERVER=irc.idontexist.com
+IRC_PORT=6667
+IRC_TLS=false
+IRC_PASSWORD=""
+EOF
 }
 
 step1_cli_setup() {
   bin/build_virtualenv
   bin/build_nzedb
+  create_simply_nzedb_conf
   bin/setup_data_dir
-  use_fake_nntp_creds
   bin/start_nzedb
 }
 

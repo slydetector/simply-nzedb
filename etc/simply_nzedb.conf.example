@@ -1,0 +1,22 @@
+# Single settings file to configure simply-nzedb
+
+#--------------
+# Usenet server
+#--------------
+NNTP_USERNAME=
+NNTP_PASSWORD=
+NNTP_SERVER=
+NNTP_PORT=
+NNTP_SSLENABLED=false
+
+#------------
+# IRC Scaper
+#------------
+IRC_USERNAME=
+IRC_SERVER=irc.synirc.net
+IRC_PORT=6667
+IRC_TLS=false
+# Change only if you're using znc
+IRC_PASSWORD=""
+
+
