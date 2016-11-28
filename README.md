@@ -27,11 +27,14 @@ bin/build_virtualenv
 # Build the nzedb docker images - this will take a while
 bin/build_nzedb
 
+# Create a copy of the *single* config file
+cp etc/simply_nzedb.conf.example etc/simply_nzedb.conf
+
+# Update config file with usenet and irc settings
+vim etc/simply_nzedb.conf
+
 # Setup the ./data dir which contains nzedb config, nzbs, mysql data, log files, etc
 bin/setup_data_dir
-
-# Update config.php with your usenet server settings
-vim data/config.php
 
 # Start up nzedb to do initial setup
 bin/start_nzedb
@@ -88,7 +91,6 @@ Congratulations, you've just accomplished the hardest part of running nZEDb, set
 
 ## TODO
 - More documentation
-- IRC scraper
 - PreDB auto-population
 
 ## Acknowledgements

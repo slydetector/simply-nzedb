@@ -2,3 +2,5 @@ venv*
 docker-compose
 data
 config.php
+etc/simply_nzedb.conf
+simply_nzedb.conf

@@ -38,6 +38,7 @@ services:
       - $PWD/data/mytop:/root/.mytop
       - $PWD/data/predb_progress.txt:/var/www/nZEDb/cli/data/predb_progress.txt
       - $PWD/data/import:/var/www/nZEDb/resources/import/
+      - $PWD/data/ircscraper_settings.php:/var/www/nZEDb/nzedb/config/ircscraper_settings.php
 
   adminer:
     image: clue/adminer

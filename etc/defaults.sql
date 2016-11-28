@@ -30,3 +30,5 @@ update tmux set value=1 where setting="console";
 update tmux set value=1 where setting="import";
 update tmux set value="/var/www/nZEDb/resources/import" where setting="nzbs";
 
+update tmux set value=1 where setting="run_ircscraper";
+

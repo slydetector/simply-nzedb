@@ -1,7 +1,16 @@
 #!/bin/bash
 echo "Creating data directory..."
 mkdir -p data
+
+# Read in all custom settings as env vars
+source etc/simply_nzedb.conf
+
 cp etc/config.php.example data/config.php
+sed -ri "s/changeme_nntp_username/${NNTP_USERNAME}/g" data/config.php
+sed -ri "s/changeme_nntp_password/${NNTP_PASSWORD}/g" data/config.php
+sed -ri "s/changeme_nntp_server/${NNTP_SERVER}/g" data/config.php
+sed -ri "s/changeme_nntp_port/${NNTP_PORT}/g" data/config.php
+sed -ri "s/changeme_nntp_sslenabled/${NNTP_SSLENABLED}/g" data/config.php
 
 cp etc/nginx.conf.example data/nginx.conf
 sed -ri "s/changeme_server_name/$(hostname)/g" data/nginx.conf
@@ -42,6 +51,14 @@ EOF
 # Save predb import progress across container start/stop.
 # Written by predb_import_daily_batch.php
 touch data/predb_progress.txt
+
+# irc scraper 
+cp etc/ircscraper_settings_example.php data/ircscraper_settings.php
+sed -ri "s/changeme_irc_username/${IRC_USERNAME}/g" data/ircscraper_settings.php
+sed -ri "s/changeme_irc_server/${IRC_SERVER}/g" data/ircscraper_settings.php
+sed -ri "s/changeme_irc_port/${IRC_PORT}/g" data/ircscraper_settings.php
+sed -ri "s/changeme_irc_tls/false/g" data/ircscraper_settings.php
+sed -ri "s/changeme_irc_password/${IRC_PASSWORD}/g" data/ircscraper_settings.php
 
 chmod -R 777 data
 echo Done
