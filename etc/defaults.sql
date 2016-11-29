@@ -5,7 +5,10 @@ update settings set value="/usr/bin/7za" where name="7zippath";
 update settings set value="/usr/bin/timeout" where name="timeoutpath";
 update settings set value=1 where name="processjpg";
 update settings set value=1 where name="processthumbnails";
-select name, value from settings where name in ('unrarpath', 'ffmpegpath', 'mediainfopath', '7zippath', 'timeoutpath', 'processjpg', 'processthumbnails');
+update settings set value=1 where name="compressedheaders";
+select name, value from settings where name in (
+  'unrarpath', 'ffmpegpath', 'mediainfopath', '7zippath', 'timeoutpath', 'processjpg', 
+  'processthumbnails', 'compressedheaders');
 
 update groups set active=1 where name="alt.binaries.teevee";
 
