@@ -37,6 +37,7 @@ RUN apk add --update \
   php5-openssl \
   php5-pcntl \
   php5-pdo_mysql \
+  proxychains-ng \
   py-pip \
   python \
   php5-ctype \
