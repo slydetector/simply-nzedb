@@ -42,7 +42,7 @@ bin/start_nzedb
 
 ### Step 2 - Automated web setup
 ```sh
-# This will run through the web setup for you using settings from simply_nzedb.conf/
+# This will run through the web setup for you using settings from simply_nzedb.conf.
 # Logs are in web_setup.log
 bin/web_setup
 ```
