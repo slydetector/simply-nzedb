@@ -1,2 +1,5 @@
 #!/bin/bash
+# This file has to exist even if it hasn't been setup by the user yet
+# since it is referenced in docker-compose.yml.
+touch etc/simply_nzedb.conf
 venv/bin/docker-compose build --pull --force-rm "$@"

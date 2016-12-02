@@ -36,3 +36,12 @@ IRC_PASSWORD=""
 NZEDB_ADMIN_USERNAME=nzedb
 NZEDB_ADMIN_PASSWORD=nzedb
 NZEDB_ADMIN_EMAIL=nzedb@localhost.com
+
+#----------------
+# Socks Proxy
+#----------------
+# The proxy is only used for post-processing scripts
+# Valid types: socks4 socks4a socks5
+SOCKS_TYPE=
+SOCKS_HOST=
+SOCKS_PORT=

@@ -25,6 +25,8 @@ services:
       - 8800:8800
     depends_on:
       - database
+    env_file: 
+      - $PWD/etc/simply_nzedb.conf
     volumes:
       - $PWD/data/covers:/var/www/nZEDb/resources/covers/
       - $PWD/data/nzb:/var/www/nZEDb/resources/nzb/
@@ -39,6 +41,7 @@ services:
       - $PWD/data/predb_progress.txt:/var/www/nZEDb/cli/data/predb_progress.txt
       - $PWD/data/import:/var/www/nZEDb/resources/import/
       - $PWD/data/ircscraper_settings.php:/var/www/nZEDb/nzedb/config/ircscraper_settings.php
+      - $PWD/data/proxychains.conf:/etc/proxychains/proxychains.conf
 
   adminer:
     image: clue/adminer

@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# Activate socks proxy on postprocessing only.
+if [[ "$1" =~ ^.*postprocess.php$ && -n $SOCKS_TYPE ]]; then
+  SOCKS_URL="${SOCKS_TYPE}://${SOCKS_HOST}:${SOCKS_PORT}"
+  export http_proxy="$SOCKS_URL"
+  export https_proxy="$SOCKS_URL"
+fi
+/usr/bin/php.real "$@"

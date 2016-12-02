@@ -76,5 +76,11 @@ sed -ri "s/changeme_irc_port/${IRC_PORT}/g" data/ircscraper_settings.php
 sed -ri "s/changeme_irc_tls/false/g" data/ircscraper_settings.php
 sed -ri "s/changeme_irc_password/${IRC_PASSWORD}/g" data/ircscraper_settings.php
 
+# proxychains for socks proxy
+cp etc/proxychains.conf.example data/proxychains.conf
+sed -ri "s/changeme_socks_type/${SOCKS_TYPE}/g" data/proxychains.conf
+sed -ri "s/changeme_socks_host/${SOCKS_HOST}/g" data/proxychains.conf
+sed -ri "s/changeme_socks_port/${SOCKS_PORT}/g" data/proxychains.conf
+
 chmod -R 777 data
 echo Done
