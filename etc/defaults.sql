@@ -35,3 +35,6 @@ update tmux set value="/var/www/nZEDb/resources/import" where setting="nzbs";
 
 update tmux set value=1 where setting="run_ircscraper";
 
+# Safe backfill
+update tmux set value=4 where setting="backfill";
+
