@@ -164,6 +164,10 @@ RUN apk --update add gcc g++ ncurses-dev libevent-dev bsd-compat-headers && \
 # Create dir for importing nzbs
 RUN mkdir -p /var/www/nZEDb/resources/import
 
+# Switch out php executable to instrument invocations
+RUN mv /usr/bin/php /usr/bin/php.real
+COPY php.proxy /usr/bin/php
+
 ENV TERM tmux
 EXPOSE 8800
 ADD s6 /etc/s6
