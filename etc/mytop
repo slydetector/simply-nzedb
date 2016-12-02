@@ -1,6 +1,0 @@
-user=nzedb
-pass=nzedb
-host=database
-db=nzedb
-delay=1
-port=3306

@@ -1,4 +1,4 @@
-# Single settings file to configure simply-nzedb
+# Settings file for simply-nzedb
 
 #--------------
 # Usenet server
@@ -10,6 +10,17 @@ NNTP_PORT=
 NNTP_SSLENABLED=false
 
 #------------
+# Database
+#------------
+DB_SYSTEM=mysql
+DB_HOST=database
+DB_PORT=3306
+DB_SOCKET=""
+DB_USER=nzedb
+DB_PASSWORD=nzedb
+DB_NAME=nzedb
+
+#------------
 # IRC Scaper
 #------------
 IRC_USERNAME=
@@ -19,4 +30,9 @@ IRC_TLS=false
 # Change only if you're using znc
 IRC_PASSWORD=""
 
-
+#-----------------
+# nZEDb Admin User
+#-----------------
+NZEDB_ADMIN_USERNAME=nzedb
+NZEDB_ADMIN_PASSWORD=nzedb
+NZEDB_ADMIN_EMAIL=nzedb@localhost.com
