@@ -34,7 +34,7 @@ vim etc/simply_nzedb.conf
 bin/setup_data_dir
 
 # Start up nzedb to do initial setup
-bin/start_nzedb
+[sudo] bin/start_nzedb
 ```
 
 ### Step 2 - Automated web setup
@@ -48,10 +48,10 @@ bin/web_setup
 ```sh
 # Update settings db table with locations of various executables like ffmpeg, mediainfo, etc
 # and subscribe to alt.binaries.teevee for verification
-bin/apply_defaults
+[sudo] bin/apply_defaults
 
 # Restart to pick up changes
-bin/start_nzedb
+[sudo] bin/start_nzedb
 ```
 
 ### Step 4 - Verification
@@ -67,7 +67,7 @@ bin/start_nzedb
 # Ctrl-a c    Create new window
 # Ctrl-a d    Detach from tmux
 # 
-bin/attach_tmux
+[sudo] bin/attach_tmux
 ```
 Go to ```http://<hostname>:8800/browse?t=5000``` and you should see some TV releases soon.
 
