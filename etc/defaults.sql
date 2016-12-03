@@ -8,9 +8,12 @@ update settings set value=1 where name="checkpasswordedrar";
 update settings set value=1 where name="processjpg";
 update settings set value=1 where name="processthumbnails";
 update settings set value=1 where name="compressedheaders";
+# 1 = scan back based on # of days, not # of posts
+update settings set value=1 where name="newgroupscanmethod";
 select name, value from settings where name in (
   'unrarpath', 'ffmpegpath', 'mediainfopath', '7zippath', 'timeoutpath', 'processjpg', 
-  'processthumbnails', 'compressedheaders', 'checkpasswordedrar');
+  'processthumbnails', 'compressedheaders', 'checkpasswordedrar',
+  'newgroupscanmethod');
 
 update groups set active=1 where name="alt.binaries.teevee";
 
