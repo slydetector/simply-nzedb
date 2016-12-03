@@ -1,0 +1,46 @@
+version: '2'
+services:
+
+  database:
+    image: slydetector/simply-nzedb-mariadb
+    restart: unless-stopped
+    volumes:
+      - $PWD/data/var_lib_mysql:/var/lib/mysql
+      - $PWD/data/etc_mysql_conf.d:/etc/mysql/conf.d
+      - $PWD/data/mysql_user:/mysql_user
+    environment:
+      - MYSQL_ROOT_PASSWORD=nzedb
+      - MYSQL_DATABASE=nzedb
+      - MYSQL_USER=nzedb
+      - MYSQL_PASSWORD=nzedb
+    expose:
+      - "3306"
+
+  nzedb:
+    image: slydetector/simply-nzedb
+    restart: unless-stopped
+    ports:
+      - 8800:8800
+    env_file: 
+      - $PWD/etc/simply_nzedb.conf
+    volumes:
+      - $PWD/data/covers:/var/www/nZEDb/resources/covers/
+      - $PWD/data/nzb:/var/www/nZEDb/resources/nzb/
+      - $PWD/data/tmp:/var/www/nZEDb/resources/tmp/unrar/
+      - $PWD/data/config.php:/var/www/nZEDb/nzedb/config/config.php
+      - $PWD/data/log/nginx-error.log:/var/log/nginx/nginx-error.log
+      - $PWD/data/log/nginx-access.log:/var/log/nginx/access.log
+      - $PWD/data/log/php-fpm.log:/var/log/php-fpm.log
+      - $PWD/data/log/php_errors.log:/var/www/nZEDb/resources/logs/php_errors.log
+      - $PWD/data/nginx.conf:/etc/nginx/nginx.conf
+      - $PWD/data/mytop:/root/.mytop
+      - $PWD/data/predb_progress.txt:/var/www/nZEDb/cli/data/predb_progress.txt
+      - $PWD/data/import:/var/www/nZEDb/resources/import/
+      - $PWD/data/ircscraper_settings.php:/var/www/nZEDb/nzedb/config/ircscraper_settings.php
+      - $PWD/data/proxychains.conf:/etc/proxychains/proxychains.conf
+
+  adminer:
+    image: clue/adminer
+    restart: unless-stopped
+    ports: 
+      - 8880:80
