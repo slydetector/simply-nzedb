@@ -2,7 +2,8 @@ version: '2'
 services:
 
   database:
-    build: mariadb
+    #build: mariadb
+    image: slydetector/simply-nzedb-mariadb
     restart: unless-stopped
     volumes:
       - $PWD/data/var_lib_mysql:/var/lib/mysql
@@ -17,7 +18,8 @@ services:
       - "3306"
 
   nzedb:
-    build: nzedb
+    #build: nzedb
+    image: slydetector/simply-nzedb
     restart: unless-stopped
     links:
       - database
