@@ -5,11 +5,13 @@ services:
     extends:
       file: common.yml
       service: database
+    build: mariadb
 
   nzedb:
     extends:
       file: common.yml
       service: nzedb
+    build: nzedb
     links:
       - database
     depends_on:
