@@ -2,5 +2,6 @@
 # This file has to exist even if it hasn't been setup by the user yet
 # since it is referenced in docker-compose.yml.
 touch etc/simply_nzedb.conf
-#venv/bin/docker-compose build --pull --force-rm "$@"
+# Use dev.yml instead of docker-compose.yml so the images are built
+# locally instead of pulled from hub.docker.com
 venv/bin/docker-compose --file dev.yml build --pull --force-rm "$@"
