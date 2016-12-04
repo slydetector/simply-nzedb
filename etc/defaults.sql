@@ -43,3 +43,9 @@ update tmux set value=1 where setting="run_ircscraper";
 # Safe backfill
 update tmux set value=4 where setting="backfill";
 
+# Decrypt hashes
+# 0 = Disabled
+# 1 = Decrypt hashes
+# 2 = PreDB
+# 3 = All
+update tmux set value=3 where setting="dehash";
