@@ -15,24 +15,28 @@ web_setup() {
   $HTTP :8800/install/step2.php |& $TEE | grep "Database Setup"
   sleep $DELAY
 
-  # TODO: db needs time to start up and initialize for the first time.
-  #       sleeps are flakey - poll/retry in loop instead
-  echo "Waiting for db to start.."
-  sleep 30 
   echo "Connecting to db.."
+  for i in {1..9}; do 
+    $HTTP \
+      --form \
+      --all :8800/install/step2.php \
+        db_system=${DB_SYSTEM} \
+        host=${DB_HOST} \
+        sql_port=${DB_PORT} \
+        sql_socket=${DB_SOCKET} \
+        user=${DB_USER} \
+        pass=${DB_PASSWORD} \
+        db=${DB_NAME} |& $TEE | \
+      grep "The database setup is correct" && break || sleep 10;
 
-  $HTTP \
-    --form \
-    --all :8800/install/step2.php \
-      db_system=${DB_SYSTEM} \
-      host=${DB_HOST} \
-      sql_port=${DB_PORT} \
-      sql_socket=${DB_SOCKET} \
-      user=${DB_USER} \
-      pass=${DB_PASSWORD} \
-      db=${DB_NAME} |& $TEE | \
-    grep "The database setup is correct"
-  sleep $DELAY
+    if [[ $i == 9 ]]; then
+      echo "Database setup failed. Check web_setup.log"
+      exit 1
+    else
+      echo "Retrying.."
+    fi 
+  done
+  
 
   echo "Step 3"
   $HTTP :8800/install/step3.php |& $TEE | grep "OpenSSL Setup"
