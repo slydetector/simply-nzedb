@@ -6,4 +6,4 @@ if [[ "$1" =~ ^.*postprocess.php$ && -n $SOCKS_TYPE ]]; then
   export http_proxy="$SOCKS_URL"
   export https_proxy="$SOCKS_URL"
 fi
-/usr/bin/php.real "$@"
+exec /usr/bin/php.real "$@"
