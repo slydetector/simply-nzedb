@@ -5,6 +5,8 @@ update settings set value="/usr/bin/7za" where name="7zippath";
 update settings set value="/usr/bin/timeout" where name="timeoutpath";
 # Has to be turned on for the rest of "additional postprocessing" to work
 update settings set value=1 where name="checkpasswordedrar";
+update settings set value=1 where name="deletepasswordedrelease";
+update settings set value=1 where name="deletepossiblerelease";
 update settings set value=1 where name="processjpg";
 update settings set value=1 where name="processthumbnails";
 update settings set value=1 where name="compressedheaders";
