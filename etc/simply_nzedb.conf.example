@@ -10,7 +10,7 @@ NNTP_PORT=
 NNTP_SSLENABLED=false
 
 #------------
-# Database
+# Database - don't change
 #------------
 DB_SYSTEM=mysql
 DB_HOST=database
