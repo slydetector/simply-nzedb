@@ -8,3 +8,8 @@ prefix=$(basename $PWD | sed "s/-//g")
 # so use this hack to get the container name prefix based on the current working dir.
 cat etc/defaults.sql | \
   docker exec -i ${prefix}_database_1 mysql --user=nzedb --password=nzedb nzedb
+
+if [ -f "etc/private.sql" ]; then
+  cat etc/private.sql | \
+    docker exec -i ${prefix}_database_1 mysql --user=nzedb --password=nzedb nzedb
+fi
