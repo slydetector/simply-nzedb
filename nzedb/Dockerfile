@@ -168,6 +168,11 @@ RUN mkdir -p /var/www/nZEDb/resources/import
 RUN mv /usr/bin/php /usr/bin/php.real
 COPY php.proxy /usr/bin/php
 
+# iconv has issues in musl which affects NFO conversion to include
+# cool ascii chars. Remove the problematic parts - TRANSLIT and IGNORE
+# See https://github.com/slydetector/simply-nzedb/issues/31
+RUN sed -i "s|UTF-8//IGNORE//TRANSLIT|UTF-8|g" /var/www/nZEDb/nzedb/utility/Text.php
+
 ENV TERM tmux
 EXPOSE 8800
 ADD s6 /etc/s6
