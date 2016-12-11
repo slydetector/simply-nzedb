@@ -51,6 +51,7 @@ mkdir -p data/etc_mysql_conf.d
 mkdir -p data/var_lib_mysql
 mkdir -p data/log
 mkdir -p data/import/inbox
+mkdir -p data/db_backups
 
 # Create as files otherwise docker will mount as directories 
 touch data/log/nginx-access.log
