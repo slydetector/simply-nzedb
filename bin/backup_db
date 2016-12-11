@@ -1,0 +1,4 @@
+#!/bin/bash
+echo "Dumping database to ./data/db_backups"
+./venv/bin/docker-compose exec nzedb /bin/bash -c "cd /var/www/nZEDb/misc/testing/DB; php mysqldump_tables.php db dump /db_backups"
+ls -l data/db_backups

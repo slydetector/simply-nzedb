@@ -38,6 +38,7 @@ services:
       - $PWD/data/import:/var/www/nZEDb/resources/import/
       - $PWD/data/ircscraper_settings.php:/var/www/nZEDb/nzedb/config/ircscraper_settings.php
       - $PWD/data/proxychains.conf:/etc/proxychains/proxychains.conf
+      - $PWD/data/db_backups:/db_backups
 
   adminer:
     image: clue/adminer
