@@ -1,5 +1,14 @@
 #!/bin/sh
+set -e
+
+# Upgrade db with latest patches if necessary
+cd /var/www/nZEDb
+./zed update db
+
+# Start up tmux which runs pretty much everything
 cd /var/www/nZEDb/misc/update/nix/tmux
 php start.php
+
 # Block indefinitely
+sleep 10
 exec tail -f /proc/`pidof tmux`/fd/1
