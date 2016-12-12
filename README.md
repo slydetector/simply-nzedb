@@ -74,6 +74,9 @@ Go to ```http://<hostname>:8800/browse?t=5000``` and you should see some TV rele
 
 Congratulations, you've just accomplished the hardest part of running nZEDb, setting it up!
 
+## Upgrading to a newer version of nZEDb
+Upgrades happen automatically for the most part. The database schema is updated as necessary on ```bin/start_nzedb``` execution.
+
 ## TODO
 - More documentation
 - PreDB auto-population
