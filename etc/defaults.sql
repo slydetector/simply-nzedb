@@ -7,6 +7,7 @@ update settings set value="/usr/bin/timeout" where name="timeoutpath";
 update settings set value=1 where name="checkpasswordedrar";
 update settings set value=1 where name="deletepasswordedrelease";
 update settings set value=1 where name="deletepossiblerelease";
+update settings set value="http://www.dereferer.org/?" where name="dereferrer_link";
 update settings set value=1 where name="processjpg";
 update settings set value=1 where name="processthumbnails";
 update settings set value=1 where name="compressedheaders";
@@ -15,7 +16,8 @@ update settings set value=1 where name="newgroupscanmethod";
 select name, value from settings where name in (
   'unrarpath', 'ffmpegpath', 'mediainfopath', '7zippath', 'timeoutpath', 'processjpg', 
   'processthumbnails', 'compressedheaders', 'checkpasswordedrar',
-  'newgroupscanmethod');
+  'newgroupscanmethod', 'dereferrer_link', 'deletepasswordedrar', 
+  'deletepossiblerelease');
 
 update groups set active=1 where name="alt.binaries.teevee";
 
