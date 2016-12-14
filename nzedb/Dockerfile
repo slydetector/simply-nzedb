@@ -173,6 +173,24 @@ COPY php.proxy /usr/bin/php
 # See https://github.com/slydetector/simply-nzedb/issues/31
 RUN sed -i "s|UTF-8//IGNORE//TRANSLIT|UTF-8|g" /var/www/nZEDb/nzedb/utility/Text.php
 
+# Build phpredis
+ENV PHPREDIS_VERSION 2.2.8
+RUN apk --update add gcc g++ autoconf && \
+  mkdir -p /tmp/phpredis && \
+  cd /tmp/phpredis && \
+  curl --location -o phpredis.tar.gz https://github.com/phpredis/phpredis/archive/${PHPREDIS_VERSION}.tar.gz && \
+  tar xzvf phpredis.tar.gz && \
+  cd phpredis-${PHPREDIS_VERSION} && \
+  phpize && \
+  ./configure && \
+  make && \
+  make install && \
+  echo "extension=redis.so" > /etc/php5/conf.d/redis.ini && \
+  cd / && \
+  rm -rf /tmp/phpredis && \
+  apk del --purge gcc g++ autoconf && \
+  rm -rf /var/cache/apk/*
+
 ENV TERM tmux
 EXPOSE 8800
 ADD s6 /etc/s6
