@@ -5,6 +5,8 @@ mkdir -p data
 # Read in all custom settings as env vars
 source etc/simply_nzedb.conf
 
+cp etc/settings.php.example data/settings.php
+
 cp etc/config.php.example data/config.php
 target="data/config.php"
 sed -ri "s/changeme_nntp_username/${NNTP_USERNAME}/g" $target
