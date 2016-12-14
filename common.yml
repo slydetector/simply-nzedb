@@ -28,6 +28,7 @@ services:
       - $PWD/data/nzb:/var/www/nZEDb/resources/nzb/
       - $PWD/data/tmp:/var/www/nZEDb/resources/tmp/unrar/
       - $PWD/data/config.php:/var/www/nZEDb/nzedb/config/config.php
+      - $PWD/data/settings.php:/var/www/nZEDb/nzedb/config/settings.php
       - $PWD/data/log/nginx-error.log:/var/log/nginx/nginx-error.log
       - $PWD/data/log/nginx-access.log:/var/log/nginx/access.log
       - $PWD/data/log/php-fpm.log:/var/log/php-fpm.log
