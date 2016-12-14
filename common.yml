@@ -46,3 +46,7 @@ services:
     restart: unless-stopped
     ports: 
       - 8880:80
+
+  redis:
+    image: redis:3.2.6-alpine
+    restart: unless-stopped

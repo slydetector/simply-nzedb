@@ -12,8 +12,10 @@ services:
       service: nzedb
     links:
       - database
+      - redis
     depends_on:
       - database
+      - redis
 
   adminer:
     extends:
@@ -23,3 +25,9 @@ services:
       - database:db
     depends_on:
       - database
+
+  redis:
+    extends:
+      file: common.yml
+      service: redis
+    
