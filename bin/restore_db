@@ -1,0 +1,3 @@
+#!/bin/bash
+echo "Restoring data/db_backups/nzedb.tgz"
+./venv/bin/docker-compose exec nzedb /bin/bash -c "cd /var/www/nZEDb/misc/testing/DB; php mysqldump_tables.php db restore /db_backups"
