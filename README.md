@@ -9,9 +9,10 @@ This is a docker based installation based on the super-slim alpine linux distro.
 ## Requirements
 - Linux box (64-bit x86 based distro - Debian, Ubuntu, whatever)
 - [docker 1.11+](https://docs.docker.com/engine/installation/)
+- git
+- [make](http://stackoverflow.com/questions/11934997/how-to-install-make-in-ubuntu)
 - python 2.7
 - [virtualenv](https://virtualenv.pypa.io/en/stable/installation/)
-- git
 
 ## Installation
 ### Step 1 - Command line setup
@@ -22,8 +23,8 @@ This is a docker based installation based on the super-slim alpine linux distro.
 $ git clone https://github.com/slydetector/simply-nzedb.git nzedb
 $ cd nzedb
 
-# Create a virtualenv for docker-compose
-$ bin/build_virtualenv
+# Create a python virtualenv for docker-compose
+$ make venv
 
 # Create a copy of the *single* config file
 $ cp etc/simply_nzedb.conf.example etc/simply_nzedb.conf
@@ -35,7 +36,7 @@ $ vim etc/simply_nzedb.conf
 $ bin/setup_data_dir
 
 # Start up nzedb to do initial setup
-$ [sudo] bin/start_nzedb
+$ [sudo] make start 
 ```
 
 ### Step 2 - Automated web setup
@@ -52,7 +53,7 @@ $ bin/web_setup
 $ [sudo] bin/apply_defaults
 
 # Restart to pick up changes
-$ [sudo] bin/start_nzedb
+$ [sudo] make start
 ```
 
 ### Step 4 - Verification
@@ -68,17 +69,40 @@ $ [sudo] bin/start_nzedb
 # Ctrl-a c    Create new window
 # Ctrl-a d    Detach from tmux
 # 
-$ [sudo] bin/attach_tmux
+$ [sudo] make attach
 ```
 Go to ```http://<hostname>:8800/browse?t=5000``` and you should see some TV releases soon.
 
 Congratulations, you've just accomplished the hardest part of running nZEDb, setting it up!
 
+## Commands
+Run ``make`` to see what else you can do.
+
+```
+$ make 
+Welcome to simply-nzedb!
+
+Core commands:
+
+  attach - attach to nzedb's tmux session
+  backup - backup database. nzedb must be running
+  help - print this help
+  restore - restore last database backup. nzedb must be running
+  shell - shell into the nzedb container
+  start - start nzedb (restarts if it is already running)
+  status - shows running container
+  stop - stops nzedb
+
+Developer commands:
+
+  build - build docker images locally instead of downloading from docker hub
+  test - run acceptance tests
+```
+
 ## Upgrading to a newer version of nZEDb
-Upgrades happen automatically for the most part. The database schema is updated as necessary on ```bin/start_nzedb``` execution.
+Upgrades happen automatically for the most part. The database schema is updated as necessary on ```make start``` execution.
 
 ## TODO
-- More documentation
 - PreDB auto-population
 
 ## Acknowledgements
