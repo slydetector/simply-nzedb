@@ -1,4 +1,4 @@
-FROM alpine:3.4
+FROM alpine:edge
 MAINTAINER theslydetector@gmail.com
 
 # Configure Timezone
@@ -21,47 +21,44 @@ RUN apk add --update \
   ffmpeg \
   iproute2 \
   mariadb-client \
-  php5-fpm \
-  php5-dev \
-  php5-pear \
-  php5-gd \
-  php5-mysql \
-  php5-curl \
-  php5-json \
-  php5-cli \
-  php5-iconv \
-  php5-imagick \
-  php5-pdo \
-  php5-exif \
-  php5-phar \
-  php5-openssl \
-  php5-pcntl \
-  php5-pdo_mysql \
+  php7-fpm \
+  php7-dev \
+  php7-pear \
+  php7-gd \
+  php7-curl \
+  php7-json \
+  php7-iconv \
+  php7-pdo \
+  php7-exif \
+  php7-phar \
+  php7-openssl \
+  php7-pcntl \
+  php7-pdo_mysql \
   proxychains-ng \
-  py-pip \
+  py2-pip \
   python \
-  php5-ctype \
+  php7-ctype \
   s6 \
   nginx \
   memcached \
-  php5-memcache \
   musl \
   tree \
   htop \
   bash \
   make \
-  php5-mcrypt \
-  php5-opcache \
-  php5-sockets \
-  php5-zlib \
+  php7-mcrypt \
+  php7-opcache \
+  php7-sockets \
+  php7-zlib \
   unrar \
+  zendframework \
   && \
   rm -rf /var/cache/apk/*
 
 # vnstat in testing repo
 
 # mytop + deps
-RUN apk add --update \
+R UN apk add --update \
   mariadb \
   perl \
   perl-dbd-mysql \
@@ -73,15 +70,16 @@ RUN apk add --update \
 RUN apk add --update strace tig vim
 
 # Install composer
-RUN curl https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
+RUN curl https://getcomposer.org/installer | php7 -- --install-dir=/usr/bin --filename=composer
 
 # Build and install simple_php_yenc_decode
-RUN apk --update add boost-dev boost-regex gcc g++ swig && \
+# Blocked: needs PHP7 support pending SWIG 3.1.0
+RUN apk --update add boost-dev boost-regex gcc g++ php7-dev swig && \
   cd /tmp && \
   git clone https://github.com/kevinlekiller/simple_php_yenc_decode && \
   cd simple_php_yenc_decode/source && \
   swig -php -c++ yenc_decode.i && \
-  g++ `php-config --includes` -fpic -c yenc_decode_wrap.cpp && \
+  g++ `php-config7 --includes` -fpic -c yenc_decode_wrap.cpp && \
   g++ -fpic -c yenc_decode.cpp -lboost_regex && \
   g++ -shared *.o -o simple_php_yenc_decode.so -lboost_regex && \
   mkdir -p /usr/lib64/php/extensions && \
@@ -89,7 +87,7 @@ RUN apk --update add boost-dev boost-regex gcc g++ swig && \
   sed -ri s,extension=,extension=/usr/lib64/php/extensions/simple_php_yenc_decode.so,g /etc/php5/php.ini && \
   cd ~ && \
   rm -rf /tmp && \
-  apk del --purge boost-dev boost-regex gcc g++ swig && \
+  apk del --purge boost-dev boost-regex gcc g++ php7-dev swig && \
   rm -rf /var/cache/apk/*
 
 # Build and install mediainfo
