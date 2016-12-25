@@ -87,6 +87,7 @@ Core commands:
   attach - attach to nzedb's tmux session
   backup - backup database. nzedb must be running
   help - print this help
+  mysql - mysql client
   restore - restore last database backup. nzedb must be running
   shell - shell into the nzedb container
   start - start nzedb (restarts if it is already running)
