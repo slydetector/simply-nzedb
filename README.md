@@ -7,7 +7,7 @@ Set up your own nZEDb usenet indexer in no time at all.
 This is a docker based installation based on the super-slim alpine linux distro.
 
 ## Requirements
-- Linux box (64-bit x86 based distro - Debian, Ubuntu, whatever)
+- Linux (64-bit x86 based distro - Debian, Ubuntu, whatever) or macOS 10+
 - [docker 1.11+](https://docs.docker.com/engine/installation/)
 - git
 - [make](http://stackoverflow.com/questions/11934997/how-to-install-make-in-ubuntu)
@@ -91,7 +91,7 @@ Core commands:
   restore - restore last database backup. nzedb must be running
   shell - shell into the nzedb container
   start - start nzedb (restarts if it is already running)
-  status - shows running container
+  status - shows running containers
   stop - stops nzedb
 
 Developer commands:
