@@ -1,4 +1,4 @@
-.PHONY: attach backup build help mysql restore shell start status stop test
+.PHONY: attach backup build help logs mysql restore shell start status stop test
 
 COMPOSE="venv/bin/docker-compose"
 
@@ -10,11 +10,12 @@ help:
 	@echo "  attach - attach to nzedb's tmux session"
 	@echo "  backup - backup database. nzedb must be running"
 	@echo "  help - print this help"
+	@echo "  logs - print container logs"
 	@echo "  mysql - mysql client"
 	@echo "  restore - restore last database backup. nzedb must be running"
 	@echo "  shell - shell into the nzedb container"
 	@echo "  start - start nzedb (restarts if it is already running)"
-	@echo "  status - shows running container"
+	@echo "  status - shows running containers"
 	@echo "  stop - stops nzedb"
 	@echo ""
 	@echo "Developer commands:"
@@ -31,6 +32,9 @@ backup:
 
 build:
 	@bin/build_nzedb
+
+logs:
+	@$(COMPOSE) logs
 
 mysql:
 	@bin/mysql
