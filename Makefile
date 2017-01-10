@@ -12,6 +12,7 @@ help:
 	@echo "  help - print this help"
 	@echo "  logs - print container logs"
 	@echo "  mysql - mysql client"
+	@echo "  pull - pull the latest version"
 	@echo "  restore - restore last database backup. nzedb must be running"
 	@echo "  shell - shell into the nzedb container"
 	@echo "  start - start nzedb (restarts if it is already running)"
@@ -38,6 +39,9 @@ logs:
 
 mysql:
 	@bin/mysql
+
+pull:
+	@$(COMPOSE) pull
 
 restore:
 	@bin/restore_db

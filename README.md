@@ -89,6 +89,7 @@ Core commands:
   help - print this help
   logs - print container logs
   mysql - mysql client
+  pull - pull the latest version
   restore - restore last database backup. nzedb must be running
   shell - shell into the nzedb container
   start - start nzedb (restarts if it is already running)
@@ -102,7 +103,7 @@ Developer commands:
 ```
 
 ## Upgrading to a newer version of nZEDb
-Upgrades happen automatically for the most part. The database schema is updated as necessary on ```make start``` execution.
+Run ```make pull``` and restart to upgrade to the latest version. The database schema is updated if necessary when starting up.
 
 ## TODO
 - PreDB auto-population
