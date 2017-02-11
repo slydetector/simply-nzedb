@@ -191,6 +191,10 @@ RUN apk --update add gcc g++ autoconf && \
   apk del --purge gcc g++ autoconf && \
   rm -rf /var/cache/apk/*
 
+LABEL nzedb=$NZEDB_VERSION \
+  maintainer=theslydetector@gmail.com \
+  url=https://github.com/slydetector/simply-nzedb
+
 ENV TERM tmux
 EXPOSE 8800
 ADD s6 /etc/s6
