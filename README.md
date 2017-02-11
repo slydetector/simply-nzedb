@@ -89,6 +89,7 @@ Core commands:
   help - print this help
   logs - print container logs
   mysql - mysql client
+  mysqltuner - run mysql tuner
   pull - pull the latest version
   restore - restore last database backup. nzedb must be running
   shell - shell into the nzedb container
