@@ -37,6 +37,7 @@ RUN apk add --update \
   php5-openssl \
   php5-pcntl \
   php5-pdo_mysql \
+  pigz \
   proxychains-ng \
   py-pip \
   python \
@@ -167,6 +168,10 @@ RUN mkdir -p /var/www/nZEDb/resources/import
 # Switch out php executable to instrument invocations
 RUN mv /usr/bin/php /usr/bin/php.real
 COPY php.proxy /usr/bin/php
+
+# Use pigz (parallel gzip) instead of gzip to speed up db backups
+RUN mv /bin/gzip /bin/gzip.real && \
+  ln -s /usr/bin/pigz /bin/gzip
 
 # iconv has issues in musl which affects NFO conversion to include
 # cool ascii chars. Remove the problematic parts - TRANSLIT and IGNORE
