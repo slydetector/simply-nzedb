@@ -132,7 +132,7 @@ RUN mkdir -p /var/log/nginx && \
     touch /var/log/nginx/nginx-error.log
 
 # Clone nZEDb and set directory permissions
-ENV NZEDB_VERSION "v0.6.9.0"
+ENV NZEDB_VERSION "v0.7.0.0"
 RUN mkdir -p /var/www && \
   cd /var/www && \
   git clone https://github.com/nZEDb/nZEDb.git && \
@@ -140,7 +140,7 @@ RUN mkdir -p /var/www && \
   git checkout --quiet --force $NZEDB_VERSION && \
   composer install && \
 	chmod -R 777 /var/www/nZEDb/ && \
-	cp /var/www/nZEDb/nzedb/config/settings.example.php /var/www/nZEDb/nzedb/config/settings.php && \
+	cp /var/www/nZEDb/configuration/settings.example.php /var/www/nZEDb/configuration/settings.php && \
   # nuke all git repos' .git dir except for nzedb's .git dir to save space
   find . -name ".git" -type d | grep -v "\.\/\.git" | xargs rm -rf && \
   # nuke ~350MB of composer cache

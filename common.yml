@@ -27,8 +27,8 @@ services:
       - $PWD/data/covers:/var/www/nZEDb/resources/covers/
       - $PWD/data/nzb:/var/www/nZEDb/resources/nzb/
       - $PWD/data/tmp:/var/www/nZEDb/resources/tmp/unrar/
-      - $PWD/data/config.php:/var/www/nZEDb/nzedb/config/config.php
-      - $PWD/data/settings.php:/var/www/nZEDb/nzedb/config/settings.php
+      - $PWD/data/config.php:/var/www/nZEDb/configuration/config.php
+      - $PWD/data/settings.php:/var/www/nZEDb/configuration/settings.php
       - $PWD/data/log/nginx-error.log:/var/log/nginx/nginx-error.log
       - $PWD/data/log/nginx-access.log:/var/log/nginx/access.log
       - $PWD/data/log/php-fpm.log:/var/log/php-fpm.log
@@ -37,7 +37,7 @@ services:
       - $PWD/data/mytop:/root/.mytop
       - $PWD/data/predb_progress.txt:/var/www/nZEDb/cli/data/predb_progress.txt
       - $PWD/data/import:/var/www/nZEDb/resources/import/
-      - $PWD/data/ircscraper_settings.php:/var/www/nZEDb/nzedb/config/ircscraper_settings.php
+      - $PWD/data/ircscraper_settings.php:/var/www/nZEDb/configuration/ircscraper_settings.php
       - $PWD/data/proxychains.conf:/etc/proxychains/proxychains.conf
       - $PWD/data/db_backups:/db_backups
 
