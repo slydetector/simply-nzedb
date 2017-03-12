@@ -104,6 +104,8 @@ Developer commands:
 ```
 
 ## Upgrading to a newer version of nZEDb
+See [UPGRADE.md](https://github.com/slydetector/simply-nzedb/blob/master/UPGRADE.md) for version specific upgrade instructions.
+
 - Run ```git pull``` to update to the latest docker files
 - Run ```make pull``` to pull the latest docker images
 - Run ```make start``` to restart nZEDb. The database schema is updated if necessary when starting up.
