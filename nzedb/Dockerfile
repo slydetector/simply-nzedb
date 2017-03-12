@@ -87,10 +87,11 @@ RUN apk --update add boost-dev boost-regex gcc g++ swig && \
   g++ -shared *.o -o simple_php_yenc_decode.so -lboost_regex && \
   mkdir -p /usr/lib64/php/extensions && \
   cp -p simple_php_yenc_decode.so /usr/lib64/php/extensions && \
-  sed -ri s,extension=,extension=/usr/lib64/php/extensions/simple_php_yenc_decode.so,g /etc/php5/php.ini && \
+  cp /etc/php5/php.ini /etc/php5/php.ini.original && \
+  sed -ri "s|;extension=php_snmp.dll|extension=/usr/lib64/php/extensions/simple_php_yenc_decode.so|" /etc/php5/php.ini && \
   cd ~ && \
   rm -rf /tmp && \
-  apk del --purge boost-dev boost-regex gcc g++ swig && \
+  apk del --purge boost-dev gcc g++ swig && \
   rm -rf /var/cache/apk/*
 
 # Build and install mediainfo
@@ -139,8 +140,7 @@ RUN mkdir -p /var/www && \
   cd /var/www/nZEDb && \
   git checkout --quiet --force $NZEDB_VERSION && \
   composer install && \
-	chmod -R 777 /var/www/nZEDb/ && \
-	cp /var/www/nZEDb/configuration/settings.example.php /var/www/nZEDb/configuration/settings.php && \
+  chmod -R 777 /var/www/nZEDb/ && \
   # nuke all git repos' .git dir except for nzedb's .git dir to save space
   find . -name ".git" -type d | grep -v "\.\/\.git" | xargs rm -rf && \
   # nuke ~350MB of composer cache

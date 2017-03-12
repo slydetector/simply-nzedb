@@ -1,14 +1,14 @@
 #!/bin/bash
 echo "Creating data directory..."
-mkdir -p data
+mkdir -p data/configuration
 
 # Read in all custom settings as env vars
 source etc/simply_nzedb.conf
 
-cp etc/settings.php.example data/settings.php
+cp etc/settings.php.example data/configuration/settings.php
 
-cp etc/config.php.example data/config.php
-target="data/config.php"
+cp etc/config.php.example data/configuration/config.php
+target="data/configuration/config.php"
 
 # Ripped from http://stackoverflow.com/questions/3466166/how-to-check-if-running-in-cygwin-mac-or-linux
 if [ "$(uname)" == "Darwin" ]; then
@@ -74,6 +74,7 @@ mkdir -p data/db_backups
 touch data/log/nginx-access.log
 touch data/log/nginx-error.log
 touch data/log/php_errors.log
+touch data/log/php_errors_web.log
 touch data/log/php-fpm.log
 
 # File that lets mysql container know user id/gid on host
@@ -87,12 +88,13 @@ EOF
 touch data/predb_progress.txt
 
 # irc scraper 
-cp etc/ircscraper_settings_example.php data/ircscraper_settings.php
-$sed "s/changeme_irc_username/${IRC_USERNAME}/g" data/ircscraper_settings.php
-$sed "s/changeme_irc_server/${IRC_SERVER}/g" data/ircscraper_settings.php
-$sed "s/changeme_irc_port/${IRC_PORT}/g" data/ircscraper_settings.php
-$sed "s/changeme_irc_tls/false/g" data/ircscraper_settings.php
-$sed "s/changeme_irc_password/${IRC_PASSWORD}/g" data/ircscraper_settings.php
+target="data/configuration/ircscraper_settings.php"
+cp etc/ircscraper_settings_example.php $target
+$sed "s/changeme_irc_username/${IRC_USERNAME}/g" $target
+$sed "s/changeme_irc_server/${IRC_SERVER}/g" $target
+$sed "s/changeme_irc_port/${IRC_PORT}/g" $target
+$sed "s/changeme_irc_tls/false/g" $target
+$sed "s/changeme_irc_password/${IRC_PASSWORD}/g" $target
 
 # proxychains for socks proxy
 cp etc/proxychains.conf.example data/proxychains.conf
