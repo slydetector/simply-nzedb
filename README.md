@@ -104,7 +104,9 @@ Developer commands:
 ```
 
 ## Upgrading to a newer version of nZEDb
-Run ```make pull``` and restart to upgrade to the latest version. The database schema is updated if necessary when starting up.
+- Run ```git pull``` to update to the latest docker files
+- Run ```make pull``` to pull the latest docker images
+- Run ```make start``` to restart nZEDb. The database schema is updated if necessary when starting up.
 
 ## TODO
 - PreDB auto-population
