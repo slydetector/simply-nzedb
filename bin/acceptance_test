@@ -64,7 +64,8 @@ step3_sane_defaults() {
 step4_verification() {
   # TODO: -T needed until https://github.com/docker/compose/issues/3379 is fixed
   venv/bin/docker-compose exec -T nzedb php update_binaries.php
-  venv/bin/docker-compose exec -T nzedb php update_releases.php 1 true
+  #venv/bin/docker-compose exec -T nzedb php update_releases.php 1 true
+  venv/bin/docker-compose exec -T nzedb php nix/multiprocessing/releases.php
 }
 
 post_test_cleanup() {
