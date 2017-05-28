@@ -1,4 +1,4 @@
-FROM mariadb:10.1.22
+FROM mariadb:10.1.23
 MAINTAINER theslydetector@gmail.com
 
 # MariaDB Configuration
