@@ -106,9 +106,12 @@ Developer commands:
 ## Upgrading to a newer version of nZEDb
 See [UPGRADE.md](https://github.com/slydetector/simply-nzedb/blob/master/UPGRADE.md) for version specific upgrade instructions.
 
+- Run ```make backup``` or you'll probably regret things if things go horribly wrong
 - Run ```git pull``` to update to the latest docker files
 - Run ```make pull``` to pull the latest docker images
 - Run ```make start``` to restart nZEDb. The database schema is updated if necessary when starting up.
+
+If after an upgrade, ```make attach``` fails, it is usually an indication that the database is getting updated or running migration steps. Use ```make logs | less -R``` to check on the progress and try again in a few minutes.
 
 ## TODO
 - PreDB auto-population
