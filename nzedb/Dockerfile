@@ -7,7 +7,6 @@ RUN rm -f /etc/localtime && \
   ln -s "/usr/share/zoneinfo/${TIMEZONE}" /etc/localtime && \
   echo "${TIMEZONE}" > /etc/timezone
 
-# Install Dependancies and Application
 RUN apk add --update \
   bwm-ng \
   curl \
@@ -55,6 +54,7 @@ RUN apk add --update \
   php5-opcache \
   php5-sockets \
   php5-zlib \
+  tzdata \
   unrar \
   && \
   rm -rf /var/cache/apk/*
@@ -133,7 +133,7 @@ RUN mkdir -p /var/log/nginx && \
     touch /var/log/nginx/nginx-error.log
 
 # Clone nZEDb and set directory permissions
-ENV NZEDB_VERSION "v0.7.2.1"
+ENV NZEDB_VERSION "v0.7.3.1"
 RUN mkdir -p /var/www && \
   cd /var/www && \
   git clone https://github.com/nZEDb/nZEDb.git && \
