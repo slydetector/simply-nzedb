@@ -1,2 +1,2 @@
 #!/bin/bash
-venv/bin/docker-compose exec nzedb tmux attach -t nZEDb
+venv/bin/docker-compose exec nzedb tmux -u attach -t nZEDb
