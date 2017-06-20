@@ -119,7 +119,7 @@ RUN pip install --upgrade pip && \
 
 # Configure PHP
 RUN sed -ri 's/(max_execution_time =) ([0-9]+)/\1 120/' /etc/php5/php.ini && \
-  sed -ri 's/(memory_limit =) ([0-9]+)/\1 -1/' /etc/php5/php.ini && \
+  sed -ri "s/(memory_limit =) (.*$)/\1 -1/" /etc/php5/php.ini && \
   sed -ri 's/;(date.timezone =)/\1 America\/Chicago/' /etc/php5/php.ini && \
   sed -ri 's/;*listen\s*=\s*127.0.0.1:9000/listen = 9000/g' /etc/php5/php-fpm.conf && \
   mkdir -p /var/log/php-fpm/
