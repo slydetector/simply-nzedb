@@ -121,3 +121,5 @@ If after an upgrade, ```make attach``` fails, it is usually an indication that t
 - Based on work from [alp-nzedb](https://github.com/MichaelLindsey/alp-nzedb)
 - Hats off to the guys moving [nZEDb](https://nzedb.github.io/) forward.
 
+## Help!
+Try the [Gitter chat room](https://gitter.im/simply-nzedb/Lobby)
