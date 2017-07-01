@@ -95,7 +95,7 @@ RUN apk --update add boost-dev boost-regex gcc g++ swig && \
   rm -rf /var/cache/apk/*
 
 # Build and install mediainfo
-ENV MEDIAINFO_VERSION 0.7.96
+ENV MEDIAINFO_VERSION 0.7.97
 RUN apk --update add gcc g++ && \
   mkdir -p /tmp && \
   cd /tmp && \
