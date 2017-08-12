@@ -200,6 +200,8 @@ LABEL nzedb=$NZEDB_VERSION \
   maintainer=theslydetector@gmail.com \
   url=https://github.com/slydetector/simply-nzedb
 
+RUN mkdir -p /var/www/nZEDb/resources/tmp && chmod 777 /var/www/nZEDb/resources/tmp
+
 ENV TERM tmux
 EXPOSE 8800
 ADD s6 /etc/s6
