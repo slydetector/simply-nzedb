@@ -7,7 +7,6 @@ RUN rm -f /etc/localtime && \
   ln -s "/usr/share/zoneinfo/${TIMEZONE}" /etc/localtime && \
   echo "${TIMEZONE}" > /etc/timezone
 
-# Install Dependancies and Application
 RUN apk add --update \
   bwm-ng \
   curl \
@@ -34,6 +33,24 @@ RUN apk add --update \
   php7-openssl \
   php7-pcntl \
   php7-pdo_mysql \
+#=======
+#  php5-fpm \
+#  php5-dev \
+#  php5-pear \
+#  php5-gd \
+#  php5-mysql \
+#  php5-curl \
+#  php5-json \
+#  php5-cli \
+#  php5-iconv \
+#  php5-imagick \
+#  php5-pdo \
+#  php5-exif \
+#  php5-phar \
+#  php5-openssl \
+#  php5-pcntl \
+#  php5-pdo_mysql \
+  pigz \
   proxychains-ng \
   py2-pip \
   python \
@@ -50,6 +67,12 @@ RUN apk add --update \
   php7-opcache \
   php7-sockets \
   php7-zlib \
+#=======
+#  php5-mcrypt \
+#  php5-opcache \
+#  php5-sockets \
+#  php5-zlib \
+  tzdata \
   unrar \
   zendframework \
   && \
@@ -84,14 +107,15 @@ RUN apk --update add boost-dev boost-regex gcc g++ php7-dev swig && \
   g++ -shared *.o -o simple_php_yenc_decode.so -lboost_regex && \
   mkdir -p /usr/lib64/php/extensions && \
   cp -p simple_php_yenc_decode.so /usr/lib64/php/extensions && \
-  sed -ri s,extension=,extension=/usr/lib64/php/extensions/simple_php_yenc_decode.so,g /etc/php5/php.ini && \
+  cp /etc/php5/php.ini /etc/php5/php.ini.original && \
+  sed -ri "s|;extension=php_snmp.dll|extension=/usr/lib64/php/extensions/simple_php_yenc_decode.so|" /etc/php5/php.ini && \
   cd ~ && \
   rm -rf /tmp && \
   apk del --purge boost-dev boost-regex gcc g++ php7-dev swig && \
   rm -rf /var/cache/apk/*
 
 # Build and install mediainfo
-ENV MEDIAINFO_VERSION 0.7.91
+ENV MEDIAINFO_VERSION 0.7.98
 RUN apk --update add gcc g++ && \
   mkdir -p /tmp && \
   cd /tmp && \
@@ -115,7 +139,7 @@ RUN pip install --upgrade pip && \
 
 # Configure PHP
 RUN sed -ri 's/(max_execution_time =) ([0-9]+)/\1 120/' /etc/php5/php.ini && \
-  sed -ri 's/(memory_limit =) ([0-9]+)/\1 -1/' /etc/php5/php.ini && \
+  sed -ri "s/(memory_limit =) (.*$)/\1 -1/" /etc/php5/php.ini && \
   sed -ri 's/;(date.timezone =)/\1 America\/Chicago/' /etc/php5/php.ini && \
   sed -ri 's/;*listen\s*=\s*127.0.0.1:9000/listen = 9000/g' /etc/php5/php-fpm.conf && \
   mkdir -p /var/log/php-fpm/
@@ -129,15 +153,14 @@ RUN mkdir -p /var/log/nginx && \
     touch /var/log/nginx/nginx-error.log
 
 # Clone nZEDb and set directory permissions
-ENV NZEDB_VERSION "v0.6.6.2"
+ENV NZEDB_VERSION "v0.7.4.0"
 RUN mkdir -p /var/www && \
   cd /var/www && \
   git clone https://github.com/nZEDb/nZEDb.git && \
   cd /var/www/nZEDb && \
   git checkout --quiet --force $NZEDB_VERSION && \
   composer install && \
-	chmod -R 777 /var/www/nZEDb/ && \
-	cp /var/www/nZEDb/nzedb/config/settings.example.php /var/www/nZEDb/nzedb/config/settings.php && \
+  chmod -R 777 /var/www/nZEDb/ && \
   # nuke all git repos' .git dir except for nzedb's .git dir to save space
   find . -name ".git" -type d | grep -v "\.\/\.git" | xargs rm -rf && \
   # nuke ~350MB of composer cache
@@ -166,6 +189,10 @@ RUN mkdir -p /var/www/nZEDb/resources/import
 RUN mv /usr/bin/php /usr/bin/php.real
 COPY php.proxy /usr/bin/php
 
+# Use pigz (parallel gzip) instead of gzip to speed up db backups
+RUN mv /bin/gzip /bin/gzip.real && \
+  ln -s /usr/bin/pigz /bin/gzip
+
 # iconv has issues in musl which affects NFO conversion to include
 # cool ascii chars. Remove the problematic parts - TRANSLIT and IGNORE
 # See https://github.com/slydetector/simply-nzedb/issues/31
@@ -188,6 +215,12 @@ RUN apk --update add gcc g++ autoconf && \
   rm -rf /tmp/phpredis && \
   apk del --purge gcc g++ autoconf && \
   rm -rf /var/cache/apk/*
+
+LABEL nzedb=$NZEDB_VERSION \
+  maintainer=theslydetector@gmail.com \
+  url=https://github.com/slydetector/simply-nzedb
+
+RUN mkdir -p /var/www/nZEDb/resources/tmp && chmod 777 /var/www/nZEDb/resources/tmp
 
 ENV TERM tmux
 EXPOSE 8800

@@ -1,18 +1,18 @@
 DELAY=1
 FLAGS="--session test --check-status --follow --verbose --debug"
-TEE="tee --append web_setup.log"
+TEE="tee -a web_setup.log"
 HTTP="venv/bin/http $FLAGS"
 
 web_setup() {
   echo "Step 0"
-  $HTTP :8800/install/ |& $TEE | grep "Pre flight check"
+  $HTTP :8800/install/ 2>&1 | $TEE | grep "Pre flight check"
 
   echo "Step 1"
-  $HTTP :8800/install/step1.php |& $TEE | grep "No problems were found and you are ready to install"
+  $HTTP :8800/install/step1.php 2>&1 | $TEE | grep "No problems were found and you are ready to install"
   sleep $DELAY
 
   echo "Step 2"
-  $HTTP :8800/install/step2.php |& $TEE | grep "Database Setup"
+  $HTTP :8800/install/step2.php 2>&1 | $TEE | grep "Database Setup"
   sleep $DELAY
 
   echo "Connecting to db.."
@@ -26,7 +26,7 @@ web_setup() {
         sql_socket=${DB_SOCKET} \
         user=${DB_USER} \
         pass=${DB_PASSWORD} \
-        db=${DB_NAME} |& $TEE | \
+        db=${DB_NAME} 2>&1 | $TEE | \
       grep "The database setup is correct" && break || sleep 10;
 
     if [[ $i == 9 ]]; then
@@ -39,18 +39,18 @@ web_setup() {
   
 
   echo "Step 3"
-  $HTTP :8800/install/step3.php |& $TEE | grep "OpenSSL Setup"
+  $HTTP :8800/install/step3.php 2>&1 | $TEE | grep "OpenSSL Setup"
   
   $HTTP \
     --form \
     --all :8800/install/step3.php \
       cafile="" \
-      capath="" |& $TEE | \
+      capath="" 2>&1 | $TEE | \
     grep "The openssl setup looks correct"
   sleep $DELAY
 
   echo "Step 4"
-  $HTTP :8800/install/step4.php |& $TEE | grep "News Server Setup"
+  $HTTP :8800/install/step4.php 2>&1 | $TEE | grep "News Server Setup"
 
   NNTP_SSL=0
   if [ ${NNTP_SSLENABLED} = "true" ]; then
@@ -70,16 +70,16 @@ web_setup() {
       usera="" \
       passa="" \
       porta=119 \
-      socket_timeouta=120 |& $TEE | \
+      socket_timeouta=120 2>&1 | $TEE | \
     grep "The news server setup is correct"
   sleep $DELAY
   
   echo "Step 5"
-  $HTTP :8800/install/step5.php |& $TEE | grep "Save Settings"
+  $HTTP :8800/install/step5.php 2>&1 | $TEE | grep "Save Settings"
   sleep $DELAY
   
   echo "Step 6"
-  $HTTP :8800/install/step6.php |& $TEE | grep "Setup Admin User"
+  $HTTP :8800/install/step6.php 2>&1 | $TEE | grep "Setup Admin User"
 
   $HTTP \
     --form \
@@ -88,18 +88,18 @@ web_setup() {
       fname="" \
       lname="" \
       pass=${NZEDB_ADMIN_PASSWORD} \
-      email=${NZEDB_ADMIN_EMAIL} |& $TEE | \
+      email=${NZEDB_ADMIN_EMAIL} 2>&1 | $TEE | \
     grep "The admin user has been setup"
   sleep $DELAY
 
   echo "Step 7"
-  $HTTP :8800/install/step7.php |& $TEE | grep "File Paths"
+  $HTTP :8800/install/step7.php 2>&1 | $TEE | grep "File Paths"
 
   $HTTP \
     --form \
     --all :8800/install/step7.php \
       coverspath="/var/www/nZEDb/resources/covers/" \
       nzbpath="/var/www/nZEDb/resources/nzb/" \
-      tmpunrarpath="/var/www/nZEDb/resources/tmp/unrar/" |& $TEE | \
+      tmpunrarpath="/var/www/nZEDb/resources/tmp/unrar/" 2>&1 | $TEE | \
     grep "Install Complete"
 }
