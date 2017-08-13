@@ -58,7 +58,7 @@ RUN apk add --update \
 # vnstat in testing repo
 
 # mytop + deps
-R UN apk add --update \
+RUN apk add --update \
   mariadb \
   perl \
   perl-dbd-mysql \

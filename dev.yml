@@ -6,6 +6,7 @@ services:
       file: common.yml
       service: database
     build: mariadb
+    image: slydetector/simply-nzedb-mariadb:php7
 
   nzedb:
     extends:
@@ -18,6 +19,7 @@ services:
     depends_on:
       - database
       - redis
+    image: slydetector/simply-nzedb:php7
 
   adminer:
     extends:
