@@ -6,3 +6,4 @@ etc/simply_nzedb.conf
 etc/private.sql
 simply_nzedb.conf
 web_setup.log
+/.idea

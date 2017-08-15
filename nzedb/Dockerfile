@@ -1,4 +1,4 @@
-FROM alpine:3.4
+FROM alpine:3.6
 MAINTAINER theslydetector@gmail.com
 
 # Configure Timezone
@@ -8,54 +8,26 @@ RUN rm -f /etc/localtime && \
   echo "${TIMEZONE}" > /etc/timezone
 
 RUN apk add --update \
-  bwm-ng \
-  curl \
-  wget \
+  bash bwm-ng \
+  coreutils curl \
+  ffmpeg file findutils \
   git \
-  unzip \
-  tar \
-  lame \
-  p7zip \
-  file \
-  ffmpeg \
-  iproute2 \
-  mariadb-client \
-  php5-fpm \
-  php5-dev \
-  php5-pear \
-  php5-gd \
-  php5-mysql \
-  php5-curl \
-  php5-json \
-  php5-cli \
-  php5-iconv \
-  php5-imagick \
-  php5-pdo \
-  php5-exif \
-  php5-phar \
-  php5-openssl \
-  php5-pcntl \
-  php5-pdo_mysql \
-  pigz \
-  proxychains-ng \
-  py-pip \
-  python \
-  php5-ctype \
-  s6 \
-  nginx \
-  memcached \
-  php5-memcache \
-  musl \
-  tree \
   htop \
-  bash \
-  make \
-  php5-mcrypt \
-  php5-opcache \
-  php5-sockets \
-  php5-zlib \
-  tzdata \
-  unrar \
+  iproute2 \
+  lame less \
+  make mariadb-client memcached musl \
+  nginx \
+  p7zip php7-ctype php7-curl php7-dev php7-exif php7-fpm php7-gd php7-iconv \
+  php7-imagick php7-json php7-mcrypt php7-opcache php7-openssl php7-pcntl \
+  php7-pdo php7-pdo_mysql php7-pear php7-phar php7-posix php7-redis \
+  php7-session php7-simplexml php7-sockets php7-xmlwriter php7-zlib pigz \
+  proxychains-ng py2-pip python \
+  s6 strace \
+  tar tig tree tzdata \
+  unrar unzip util-linux \
+  vim \
+  wget \
+  zendframework \
   && \
   rm -rf /var/cache/apk/*
 
@@ -70,29 +42,8 @@ RUN apk add --update \
   && \
   rm -rf /var/cache/apk/*
 
-# Dev tools
-RUN apk add --update strace tig vim
-
 # Install composer
-RUN curl https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
-
-# Build and install simple_php_yenc_decode
-RUN apk --update add boost-dev boost-regex gcc g++ swig && \
-  cd /tmp && \
-  git clone https://github.com/kevinlekiller/simple_php_yenc_decode && \
-  cd simple_php_yenc_decode/source && \
-  swig -php -c++ yenc_decode.i && \
-  g++ `php-config --includes` -fpic -c yenc_decode_wrap.cpp && \
-  g++ -fpic -c yenc_decode.cpp -lboost_regex && \
-  g++ -shared *.o -o simple_php_yenc_decode.so -lboost_regex && \
-  mkdir -p /usr/lib64/php/extensions && \
-  cp -p simple_php_yenc_decode.so /usr/lib64/php/extensions && \
-  cp /etc/php5/php.ini /etc/php5/php.ini.original && \
-  sed -ri "s|;extension=php_snmp.dll|extension=/usr/lib64/php/extensions/simple_php_yenc_decode.so|" /etc/php5/php.ini && \
-  cd ~ && \
-  rm -rf /tmp && \
-  apk del --purge boost-dev gcc g++ swig && \
-  rm -rf /var/cache/apk/*
+RUN curl https://getcomposer.org/installer | php7 -- --install-dir=/usr/bin --filename=composer
 
 # Build and install mediainfo
 ENV MEDIAINFO_VERSION 0.7.98
@@ -111,17 +62,17 @@ RUN apk --update add gcc g++ && \
   apk del --purge gcc g++ && \
   rm -rf /var/cache/apk/*
 
-
 # Install Python MySQL Modules
 RUN pip install --upgrade pip && \
   pip install --upgrade setuptools && \
   pip install cymysql pynntp socketpool
 
 # Configure PHP
-RUN sed -ri 's/(max_execution_time =) ([0-9]+)/\1 120/' /etc/php5/php.ini && \
-  sed -ri "s/(memory_limit =) (.*$)/\1 -1/" /etc/php5/php.ini && \
-  sed -ri 's/;(date.timezone =)/\1 America\/Chicago/' /etc/php5/php.ini && \
-  sed -ri 's/;*listen\s*=\s*127.0.0.1:9000/listen = 9000/g' /etc/php5/php-fpm.conf && \
+RUN sed -ri 's/(max_execution_time =) ([0-9]+)/\1 120/' /etc/php7/php.ini && \
+  sed -ri "s/(memory_limit =) (.*$)/\1 -1/" /etc/php7/php.ini && \
+  sed -ri 's/;(date.timezone =)/\1 America\/Chicago/' /etc/php7/php.ini && \
+  sed -ri 's/listen\s*=\s*127.0.0.1:9000/listen = 9000/g' /etc/php7/php-fpm.d/www.conf && \
+  sed -ri 's|;include_path = ".:/php/includes"|include_path = ".:/usr/share/php7"|g' /etc/php7/php.ini && \
   mkdir -p /var/log/php-fpm/
 
 # Install and configure nginx.
@@ -162,6 +113,22 @@ RUN apk --update add gcc g++ ncurses-dev libevent-dev bsd-compat-headers && \
   apk del --purge gcc g++ ncurses-dev libevent-dev bsd-compat-headers && \
   rm -rf /var/cache/apk/*
 
+# Build and install php-yenc
+RUN cd /tmp && \
+  apk --update add gcc re2c libc-dev sudo && \
+  mkdir -p /tmp/zephir && \
+  cd /tmp/zephir && \
+  composer require phalcon/zephir && \
+  cd /tmp && \
+  git clone https://github.com/niel/php-yenc.git && \
+  cd php-yenc && \
+  /tmp/zephir/vendor/bin/zephir install && \
+  echo "extension=yenc.so" > /etc/php7/conf.d/99_yenc.ini && \
+  composer clear-cache && \
+  cd /tmp && \
+  rm -rf zephir php-yenc && \
+  apk del --purge gcc re2c libc-dev sudo
+
 # Create dir for importing nzbs
 RUN mkdir -p /var/www/nZEDb/resources/import
 
@@ -177,24 +144,6 @@ RUN mv /bin/gzip /bin/gzip.real && \
 # cool ascii chars. Remove the problematic parts - TRANSLIT and IGNORE
 # See https://github.com/slydetector/simply-nzedb/issues/31
 RUN sed -i "s|UTF-8//IGNORE//TRANSLIT|UTF-8|g" /var/www/nZEDb/nzedb/utility/Text.php
-
-# Build phpredis
-ENV PHPREDIS_VERSION 2.2.8
-RUN apk --update add gcc g++ autoconf && \
-  mkdir -p /tmp/phpredis && \
-  cd /tmp/phpredis && \
-  curl --location -o phpredis.tar.gz https://github.com/phpredis/phpredis/archive/${PHPREDIS_VERSION}.tar.gz && \
-  tar xzvf phpredis.tar.gz && \
-  cd phpredis-${PHPREDIS_VERSION} && \
-  phpize && \
-  ./configure && \
-  make && \
-  make install && \
-  echo "extension=redis.so" > /etc/php5/conf.d/redis.ini && \
-  cd / && \
-  rm -rf /tmp/phpredis && \
-  apk del --purge gcc g++ autoconf && \
-  rm -rf /var/cache/apk/*
 
 LABEL nzedb=$NZEDB_VERSION \
   maintainer=theslydetector@gmail.com \
