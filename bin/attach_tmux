@@ -1,2 +1,3 @@
 #!/bin/bash
-venv/bin/docker-compose exec nzedb tmux -u attach -t nZEDb
+# Fucking docker! https://github.com/moby/moby/issues/30421
+venv/bin/docker-compose exec nzedb script -c "tmux -u attach -t nZEDb" /dev/null
