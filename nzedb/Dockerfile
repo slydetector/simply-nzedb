@@ -21,7 +21,7 @@ RUN apk add --update \
   php7-imagick php7-json php7-mcrypt php7-opcache php7-openssl php7-pcntl \
   php7-pdo php7-pdo_mysql php7-pear php7-phar php7-posix php7-redis \
   php7-session php7-simplexml php7-sockets php7-xmlwriter php7-zlib pigz \
-  proxychains-ng py2-pip python \
+  proxychains-ng pstree py2-pip python \
   s6 strace \
   tar tig tree tzdata \
   unrar unzip util-linux \
