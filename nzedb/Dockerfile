@@ -2,7 +2,7 @@ FROM alpine:3.6
 MAINTAINER theslydetector@gmail.com
 
 # Configure Timezone
-ENV TIMEZONE "America/Halifax"
+ENV TIMEZONE "America/Chicago"
 RUN rm -f /etc/localtime && \
   ln -s "/usr/share/zoneinfo/${TIMEZONE}" /etc/localtime && \
   echo "${TIMEZONE}" > /etc/timezone
