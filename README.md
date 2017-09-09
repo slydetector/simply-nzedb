@@ -114,6 +114,15 @@ See [UPGRADE.md](https://github.com/slydetector/simply-nzedb/blob/master/UPGRADE
 
 If after an upgrade, ```make attach``` fails, it is usually an indication that the database is getting updated or running migration steps. Use ```make logs | less -R``` to check on the progress and try again in a few minutes.
 
+## Customizing MySQL
+You can customize mysql settings by creating ```data/etc_mysql_conf.d/nzedb.cnf```. e.g.
+```
+[mysqld]
+key_buffer_size = 2G
+innodb_buffer_pool_size = 8G
+group_concat_max_len = 32768
+```
+
 ## TODO
 - PreDB auto-population
 
