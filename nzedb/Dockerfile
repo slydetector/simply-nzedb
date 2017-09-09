@@ -130,9 +130,11 @@ RUN cd /tmp && \
   apk del --purge gcc re2c libc-dev sudo
 
 # Build and install par2
+ENV PAR2_VERSION "v0.7.4"
 RUN apk --update add gcc autoconf automake g++ python-dev openssl-dev libffi-dev && \
   git clone https://github.com/Parchive/par2cmdline.git /tmp/par2 && \
   cd /tmp/par2 && \
+  git checkout --quiet --force $PAR2_VERSION && \
   aclocal && \
   automake --add-missing && \
   autoconf && \
