@@ -129,6 +129,22 @@ RUN cd /tmp && \
   rm -rf zephir php-yenc && \
   apk del --purge gcc re2c libc-dev sudo
 
+# Build and install par2
+ENV PAR2_VERSION "v0.7.4"
+RUN apk --update add gcc autoconf automake g++ python-dev openssl-dev libffi-dev && \
+  git clone https://github.com/Parchive/par2cmdline.git /tmp/par2 && \
+  cd /tmp/par2 && \
+  git checkout --quiet --force $PAR2_VERSION && \
+  aclocal && \
+  automake --add-missing && \
+  autoconf && \
+  ./configure && \
+  make && \
+  make install && \
+  rm -rf /tmp/par2 && \
+  ln -s /usr/local/bin/par2 /usr/bin/par2 && \
+  apk del --purge automake gcc autoconf g++ python-dev openssl-dev libffi-dev
+
 # Create dir for importing nzbs
 RUN mkdir -p /var/www/nZEDb/resources/import
 
