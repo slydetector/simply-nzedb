@@ -46,7 +46,7 @@ RUN apk add --update \
 RUN curl https://getcomposer.org/installer | php7 -- --install-dir=/usr/bin --filename=composer
 
 # Build and install mediainfo
-ENV MEDIAINFO_VERSION 0.7.99
+ENV MEDIAINFO_VERSION 17.10
 RUN apk --update add gcc g++ && \
   mkdir -p /tmp && \
   cd /tmp && \
@@ -114,11 +114,18 @@ RUN apk --update add gcc g++ ncurses-dev libevent-dev bsd-compat-headers && \
   rm -rf /var/cache/apk/*
 
 # Build and install php-yenc
+ENV PHP_ZEPHIR_PARSER_VERSION v1.1.0
 RUN cd /tmp && \
   apk --update add gcc re2c libc-dev sudo && \
   mkdir -p /tmp/zephir && \
   cd /tmp/zephir && \
   composer require phalcon/zephir && \
+  cd /tmp && \
+  git clone git://github.com/phalcon/php-zephir-parser.git && \
+  cd php-zephir-parser && \
+  git checkout --quiet --force $PHP_ZEPHIR_PARSER_VERSION && \
+  ./install && \
+  echo "extension=zephir_parser.so" > /etc/php7/conf.d/98_zephir_parser.ini && \
   cd /tmp && \
   git clone https://github.com/niel/php-yenc.git && \
   cd php-yenc && \
@@ -126,7 +133,7 @@ RUN cd /tmp && \
   echo "extension=yenc.so" > /etc/php7/conf.d/99_yenc.ini && \
   composer clear-cache && \
   cd /tmp && \
-  rm -rf zephir php-yenc && \
+  rm -rf zephir php-yenc php-zephir-parser && \
   apk del --purge gcc re2c libc-dev sudo
 
 # Build and install par2
