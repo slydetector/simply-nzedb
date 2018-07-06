@@ -114,7 +114,7 @@ RUN apk --update add gcc g++ ncurses-dev libevent-dev bsd-compat-headers && \
   rm -rf /var/cache/apk/*
 
 # Build and install php-yenc
-ENV PHP_ZEPHIR_PARSER_VERSION v1.1.0
+ENV PHP_ZEPHIR_PARSER_VERSION v1.1.2
 RUN cd /tmp && \
   apk --update add gcc re2c libc-dev sudo && \
   mkdir -p /tmp/zephir && \
