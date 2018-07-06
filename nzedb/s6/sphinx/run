@@ -1,0 +1,2 @@
+#!/bin/sh
+exec searchd --nodetach -c /var/www/nZEDb/misc/sphinxsearch/sphinx.conf

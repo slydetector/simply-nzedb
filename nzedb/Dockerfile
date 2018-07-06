@@ -173,6 +173,7 @@ LABEL nzedb=$NZEDB_VERSION \
   url=https://github.com/slydetector/simply-nzedb
 
 RUN mkdir -p /var/www/nZEDb/resources/tmp && chmod 777 /var/www/nZEDb/resources/tmp
+RUN mkdir -p /var/lib/sphinxsearch/data && mkdir -p /var/run/sphinxsearch && mkdir -p /var/log/sphinxsearch
 
 ENV TERM tmux
 EXPOSE 8800
