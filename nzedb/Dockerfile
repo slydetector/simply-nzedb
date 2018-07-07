@@ -1,4 +1,4 @@
-FROM alpine:3.6
+FROM alpine:3.8
 MAINTAINER theslydetector@gmail.com
 
 # Configure Timezone
@@ -47,7 +47,7 @@ RUN apk add --update \
 RUN curl https://getcomposer.org/installer | php7 -- --install-dir=/usr/bin --filename=composer
 
 # Build and install mediainfo
-ENV MEDIAINFO_VERSION 18.03.1
+ENV MEDIAINFO_VERSION 18.05
 RUN apk --update add gcc g++ && \
   mkdir -p /tmp && \
   cd /tmp && \
@@ -85,7 +85,7 @@ RUN mkdir -p /var/log/nginx && \
     touch /var/log/nginx/nginx-error.log
 
 # Clone nZEDb and set directory permissions
-ENV NZEDB_VERSION "v0.8.7.0"
+ENV NZEDB_VERSION "v0.8.8.1"
 RUN mkdir -p /var/www && \
   cd /var/www && \
   git clone https://github.com/nZEDb/nZEDb.git && \
@@ -138,7 +138,7 @@ RUN cd /tmp && \
   apk del --purge gcc re2c libc-dev sudo
 
 # Build and install par2
-ENV PAR2_VERSION "v0.7.4"
+ENV PAR2_VERSION "v0.8.0"
 RUN apk --update add gcc autoconf automake g++ python-dev openssl-dev libffi-dev && \
   git clone https://github.com/Parchive/par2cmdline.git /tmp/par2 && \
   cd /tmp/par2 && \
