@@ -46,7 +46,7 @@ RUN apk add --update \
 RUN curl https://getcomposer.org/installer | php7 -- --install-dir=/usr/bin --filename=composer
 
 # Build and install mediainfo
-ENV MEDIAINFO_VERSION 18.03.1
+ENV MEDIAINFO_VERSION 18.05
 RUN apk --update add gcc g++ && \
   mkdir -p /tmp && \
   cd /tmp && \
