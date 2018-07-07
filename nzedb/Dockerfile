@@ -90,7 +90,7 @@ RUN mkdir -p /var/www && \
   cd /var/www && \
   git clone https://github.com/nurse-curtis/nZEDb.git && \
   cd /var/www/nZEDb && \
-  # git checkout --quiet --force $NZEDB_VERSION && \
+  git checkout --quiet --force $NZEDB_VERSION && \
   composer install && \
   chmod -R 777 /var/www/nZEDb/ && \
   # nuke all git repos' .git dir except for nzedb's .git dir to save space
