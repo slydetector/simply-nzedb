@@ -88,9 +88,9 @@ RUN mkdir -p /var/log/nginx && \
 ENV NZEDB_VERSION "v0.8.8.1"
 RUN mkdir -p /var/www && \
   cd /var/www && \
-  git clone https://github.com/nZEDb/nZEDb.git && \
+  git clone https://github.com/nurse-curtis/nZEDb.git && \
   cd /var/www/nZEDb && \
-  git checkout --quiet --force $NZEDB_VERSION && \
+  # git checkout --quiet --force $NZEDB_VERSION && \
   composer install && \
   chmod -R 777 /var/www/nZEDb/ && \
   # nuke all git repos' .git dir except for nzedb's .git dir to save space
