@@ -1,0 +1,10 @@
+#!/bin/bash
+source etc/simply_nzedb.conf
+# this file upgrades mysql database from older version to newer version
+venv/bin/docker-compose exec database mysql_upgrade  \
+  --socket /var/run/mysqld/mysqld.sock \
+  --user root \
+  --password \
+  --protocol socket \
+  --verbose \
+  "$@"
