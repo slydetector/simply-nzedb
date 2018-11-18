@@ -1,0 +1,3 @@
+#!/bin/sh
+# from https://github.com/nurse-curtis/simply-nzedb
+exec searchd --nodetach -c /var/www/nZEDb/misc/sphinxsearch/sphinx.conf
