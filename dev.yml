@@ -1,4 +1,4 @@
-version: '2'
+version: '2.1'
 services:
 
   database:
@@ -17,18 +17,32 @@ services:
       - redis
     depends_on:
       - database
+        #condition: service_healthy
       - redis
+        #condition: service_started
 
   adminer:
     extends:
       file: common.yml
       service: adminer
-    links: 
+    links:
       - database:db
     depends_on:
       - database
+        # condition: service_healthy
 
   redis:
     extends:
       file: common.yml
       service: redis
+
+
+  phpmyadmin:
+    extends:
+      file: common.yml
+      service: phpmyadmin
+    links:
+      - database:db
+    depends_on:
+      - database
+        # condition: service_healthy
