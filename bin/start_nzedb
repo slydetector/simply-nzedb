@@ -1,3 +1,15 @@
 #!/bin/bash
 bin/stop_nzedb
+# use ram disk to accelerate operations.  comment the following lines if no /dev/shm exists on your system
+chmod -R 777 /dev/shm
+mkdir -p /dev/shm/unrar
+chmod -R 777 /dev/shm/unrar
+ln -sfn /dev/shm/unrar/ /home/glen/nzedb/data/tmp/
+mkdir -p /dev/shm/yEnc
+chmod -R 777 /dev/shm/yEnc
+ln -sfn /dev/shm/yEnc/ /home/glen/nzedb/data/tmp/
+mkdir -p /dev/shm/mysql
+chmod -R 777 /dev/shm/mysql
+ln -sfn /dev/shm/mysql/ /home/glen/nzedb/data/tmp/
+chmod -R 777 /home/glen/nzedb/data/tmp/
 venv/bin/docker-compose up -d
