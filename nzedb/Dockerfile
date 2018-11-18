@@ -1,4 +1,4 @@
-FROM alpine:3.7
+FROM alpine:3.8
 MAINTAINER theslydetector@gmail.com
 
 # Configure Timezone
@@ -17,6 +17,8 @@ RUN apk add --update \
   lame less \
   make mariadb-client memcached musl \
   nginx \
+  # in case you wanted sphinx later \
+  sphinx \
   p7zip php7-ctype php7-curl php7-dev php7-exif php7-fpm php7-gd php7-iconv \
   php7-imagick php7-json php7-mcrypt php7-opcache php7-openssl php7-pcntl \
   php7-pdo php7-pdo_mysql php7-pear php7-phar php7-posix php7-redis \
@@ -40,13 +42,22 @@ RUN apk add --update \
   perl-dbd-mysql \
   perl-term-readkey \
   && \
-  rm -rf /var/cache/apk/*
+  # Alpine 3.8 no longer includes mytop, must build from scratch \
+  rm -rf /var/cache/apk/* && \
+  cd /tmp && \
+  curl -o mytop.tar.gz http://jeremy.zawodny.com/mysql/mytop/mytop-1.6.tar.gz && \
+  tar -zxvf mytop.tar.gz && \
+  cd mytop-1.6 && \
+  perl Makefile.PL && \
+  make && \
+  make test && \
+  make install
 
 # Install composer
 RUN curl https://getcomposer.org/installer | php7 -- --install-dir=/usr/bin --filename=composer
 
-# Build and install mediainfo
-ENV MEDIAINFO_VERSION 18.05
+# Build and install mediainfo with newest version
+ENV MEDIAINFO_VERSION 18.08
 RUN apk --update add gcc g++ && \
   mkdir -p /tmp && \
   cd /tmp && \
@@ -70,7 +81,7 @@ RUN pip install --upgrade pip && \
 # Configure PHP
 RUN sed -ri 's/(max_execution_time =) ([0-9]+)/\1 120/' /etc/php7/php.ini && \
   sed -ri "s/(memory_limit =) (.*$)/\1 -1/" /etc/php7/php.ini && \
-  sed -ri 's/;(date.timezone =)/\1 America\/Chicago/' /etc/php7/php.ini && \
+  sed -ri 's/;(date.timezone =)/\1 America\/Toronto/' /etc/php7/php.ini && \
   sed -ri 's/listen\s*=\s*127.0.0.1:9000/listen = 9000/g' /etc/php7/php-fpm.d/www.conf && \
   sed -ri 's|;include_path = ".:/php/includes"|include_path = ".:/usr/share/php7"|g' /etc/php7/php.ini && \
   mkdir -p /var/log/php-fpm/
@@ -84,12 +95,13 @@ RUN mkdir -p /var/log/nginx && \
     touch /var/log/nginx/nginx-error.log
 
 # Clone nZEDb and set directory permissions
-ENV NZEDB_VERSION "v0.8.7.0"
+ENV NZEDB_VERSION "v0.8.12.0"
+# currently cloning my dev version instead of the original: git checkout --quiet --force $NZEDB_VERSION && \
 RUN mkdir -p /var/www && \
   cd /var/www && \
-  git clone https://github.com/nZEDb/nZEDb.git && \
+  git clone https://github.com/pl77/nZEDb.git && \
   cd /var/www/nZEDb && \
-  git checkout --quiet --force $NZEDB_VERSION && \
+  git checkout --quiet --force dev && \
   composer install && \
   chmod -R 777 /var/www/nZEDb/ && \
   # nuke all git repos' .git dir except for nzedb's .git dir to save space
@@ -97,7 +109,7 @@ RUN mkdir -p /var/www && \
   # nuke ~350MB of composer cache
   composer clear-cache
 
-# Build tmux 2.0 since tmux 2.2 has issues: https://github.com/nZEDb/nZEDb/issues/2182 
+# Build tmux 2.0 since tmux 2.2 has issues: https://github.com/nZEDb/nZEDb/issues/2182
 ENV TMUX_VERSION 2.0
 RUN apk --update add gcc g++ ncurses-dev libevent-dev bsd-compat-headers && \
   mkdir -p /tmp/tmux && \
@@ -126,11 +138,12 @@ RUN cd /tmp && \
   git checkout --quiet --force $PHP_ZEPHIR_PARSER_VERSION && \
   ./install && \
   echo "extension=zephir_parser.so" > /etc/php7/conf.d/98_zephir_parser.ini && \
-  cd /tmp && \
-  git clone https://github.com/niel/php-yenc.git && \
-  cd php-yenc && \
-  /tmp/zephir/vendor/bin/zephir install && \
-  echo "extension=yenc.so" > /etc/php7/conf.d/99_yenc.ini && \
+  # eliminated due to no new php-yenc version for php7.2
+  #cd /tmp && \
+  #git clone https://github.com/niel/php-yenc.git && \
+  #cd php-yenc && \
+  #/tmp/zephir/vendor/bin/zephir install && \
+  #echo "extension=yenc.so" > /etc/php7/conf.d/99_yenc.ini && \
   composer clear-cache && \
   cd /tmp && \
   rm -rf zephir php-yenc php-zephir-parser && \
@@ -142,7 +155,7 @@ RUN apk --update add gcc autoconf automake g++ python-dev openssl-dev libffi-dev
   git clone https://github.com/Parchive/par2cmdline.git /tmp/par2 && \
   cd /tmp/par2 && \
   git checkout --quiet --force $PAR2_VERSION && \
-  ./automake.sh && \ 
+  ./automake.sh && \
   ./configure --prefix=/usr && \
   make && \
   make install && \
@@ -172,6 +185,9 @@ LABEL nzedb=$NZEDB_VERSION \
   url=https://github.com/slydetector/simply-nzedb
 
 RUN mkdir -p /var/www/nZEDb/resources/tmp && chmod 777 /var/www/nZEDb/resources/tmp
+# for running sphinx later
+RUN mkdir -p /var/lib/sphinxsearch/data && mkdir -p /var/run/sphinxsearch && mkdir -p /var/log/sphinxsearch
+
 
 ENV TERM tmux
 EXPOSE 8800
