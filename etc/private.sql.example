@@ -1,0 +1,358 @@
+-- The API key used for access to TMDb. (32 character hash)
+UPDATE settings SET value="" WHERE name="tmdbkey";
+
+-- The Fanart.tv api key. Used for Fanart.tv lookups. (32 character hash)
+-- Fanart.tv would appreciate it if you use this service to help them out by adding high quality images not already available on TMDB.
+UPDATE settings SET value="" WHERE name="fanarttvkey";
+
+-- The Trakt.tv API v2 Client ID (SHA256 hash - 64 characters long string). Used for movie and tv lookups.
+UPDATE settings SET value="" WHERE name="trakttvclientkey";
+
+-- The url of the SAB installation, for example: http://localhost:8080/sabnzbd/
+UPDATE settings SET value="" WHERE name="url";
+
+-- The Api key of the SAB installation. Can be the full api key or the nzb api key (as of SAB 0.6) (32 character hash)
+UPDATE settings SET value="" WHERE name="apikey";
+
+-- Select the type of api key you entered in the above setting
+UPDATE settings SET value=2 WHERE name="apikeytype";
+
+-- The number of threads for backfill.
+UPDATE settings SET value=1 WHERE name="backfillthreads";
+
+-- The number of threads for update_binaries.
+-- If you notice that you are getting a lot of parts into the partrepair table, it is possible that you USP is not
+-- keeping up with the requests.
+-- Try to reduce the threads to safe scripts or stop using safe scripts until improves.
+-- Or least until the cause can be determined.
+UPDATE settings SET value=1 WHERE name="binarythreads";
+
+-- The target date for safe backfill. Format: YYYY-MM-DD
+UPDATE settings SET value="2008-01-01" WHERE name="safebackfilldate";
+
+-- How much time to wait for unrar/7zip/mediainfo/ffmpeg/avconv before killing it, set to 0 to disable.
+-- 60 is a good value. Requires the GNU Timeout path to be set.
+UPDATE settings SET value=60 WHERE name="timeoutseconds";
+
+-- Whether to put unreceived parts into partrepair table when running binaries(safe) or backfill scripts.
+UPDATE settings SET value=1 WHERE name="safepartrepair";
+
+-- The maximum number of segments to download to generate the sample video file. (Default 2)
+UPDATE settings SET value=3 WHERE name="segmentstodownload";
+
+-- The number of threads for update_releases.
+UPDATE settings SET value=1 WHERE name="releasesthreads";
+
+-- The number of threads for local request id processing.
+UPDATE settings SET value=1 WHERE name="reqidthreads";
+
+-- The maximum duration (In Seconds) for ffmpeg to generate the sample for. (Default 5)
+UPDATE settings SET value=7 WHERE name="ffmpeg_duration";
+
+-- The maximum number of headers that update binaries is given as the total range.
+-- This ensures that a total of no more than this amount is attempted to be downloaded per group.
+UPDATE settings SET value=1000000 WHERE name="iteration";
+
+-- Whether to attempt to lookup Request IDs using the Request ID link below.
+UPDATE settings SET value=1 WHERE name="lookup_reqids";
+
+-- Whether to attempt to lookup book information from Amazon when processing binaries.
+UPDATE settings SET value=1 WHERE name="lookupbooks";
+
+-- Whether to attempt to lookup game information from Amazon when processing binaries.
+UPDATE settings SET value=1 WHERE name="lookupgames";
+
+-- Whether to attempt to lookup film information from IMDB or TheMovieDB when processing binaries.
+UPDATE settings SET value=1 WHERE name="lookupimdb";
+
+-- Whether to attempt to lookup music information from Amazon when processing binaries.
+UPDATE settings SET value=1 WHERE name="lookupmusic";
+
+-- Whether to attempt to retrieve an nfo file from usenet when processing binaries.
+-- NOTE: disabling nfo lookups will disable movie lookups.
+UPDATE settings SET value=1 WHERE name="lookupnfo";
+
+-- Whether to attempt to lookup tv rage ids on the web when processing binaries.
+UPDATE settings SET value=1 WHERE name="lookuptvrage";
+
+-- Whether to attempt to lookup xxx information from ADE or Popporn when processing binaries.
+UPDATE settings SET value=1 WHERE name="lookupxxx";
+
+-- The maximum amount of NZB files to create on stage 5 in update_releases.
+UPDATE settings SET value=1000 WHERE name="maxnzbsprocessed";
+
+-- The maximum amount of articles to attempt to repair at a time.
+-- If you notice that you are getting a lot of parts into the partrepair table, it is possible that you USP is not
+-- keeping up with the requests.
+-- Try to reduce the threads to safe scripts or stop using safe scripts until improves.
+-- Or least until the cause can be determined.
+UPDATE settings SET value=15000 WHERE name="maxpartrepair";
+
+-- If a part fails to download while post processing, this will retry up to the amount you set, then give up.
+UPDATE settings SET value=3 WHERE name="maxpartsprocessed";
+
+-- The maximum amount of TV shows to process with TVRage per run. This does not use an NNTP connection or query Amazon.
+UPDATE settings SET value=75 WHERE name="maxrageprocessed";
+
+-- The maximum size in gigabytes to post process (additional) a release. If set to 0, then ignored.
+UPDATE settings SET value=100 WHERE name="maxsizetopostprocess";
+
+-- The maximum size in gigabytes of a release to process it for NFOs. If set to 0, then ignored.
+UPDATE settings SET value=100 WHERE name="maxsizetoprocessnfo";
+
+-- The maximum amount of xxx to process with ADE and Popporn per run. This does not use an NNTP connection or query Amazon.
+UPDATE settings SET value=100 WHERE name="maxxxxprocessed";
+
+-- The maximum amount of releases to process for passwords/previews/mediainfo per run. Every release gets processed here.
+-- This uses NNTP an connection, 1 per thread. This does not query Amazon.
+UPDATE settings SET value=25 WHERE name="maxaddprocessed";
+
+-- The maximum amount of anime to process with anidb per run. This does not use an NNTP connection or query Amazon.
+UPDATE settings SET value=100 WHERE name="maxanidbprocessed";
+
+-- The maximum amount of books to process with amazon per run. This does not use an NNTP connection
+UPDATE settings SET value=300 WHERE name="maxbooksprocessed";
+
+-- The maximum amount of games to process with amazon per run. This does not use an NNTP connection.
+UPDATE settings SET value=150 WHERE name="maxgamesprocessed";
+
+-- The maximum amount of movies to process with IMDB per run. This does not use an NNTP connection or query Amazon.
+UPDATE settings SET value=100 WHERE name="maximdbprocessed";
+
+-- The maximum number of messages to fetch at a time from the server. Only raise this if you have php set right and lots of RAM.
+UPDATE settings SET value=20000 WHERE name="maxmssgs";
+
+-- The maximum amount of music to process with amazon per run. This does not use an NNTP connection.
+UPDATE settings SET value=150 WHERE name="maxmusicprocessed";
+
+-- How many levels deep to go into nested rar/zip files.
+UPDATE settings SET value=3 WHERE name="maxnestedlevels";
+
+-- The maximum amount of NFO files to process per run. This uses an NNTP connection, 1 per thread. This does not query Amazon.
+UPDATE settings SET value=100 WHERE name="maxnfoprocessed";
+
+-- The minimum number of files to make a release. i.e. if set to two, then releases which only contain one file will not be created.
+UPDATE settings SET value=1 WHERE name="minfilestoformrelease";
+
+-- The minimum total size in bytes to make a release. If set to 0, then ignored. Only deletes during release creation.
+UPDATE settings SET value=512000 WHERE name="minsizetoformrelease";
+
+-- The minimum size in megabytes to post process (additional) a release. If set to 0, then ignored.
+UPDATE settings SET value=1 WHERE name="minsizetopostprocess";
+
+-- The minimum size in megabytes of a release to process it for NFOs. If set to 0, then ignored.
+UPDATE settings SET value=1 WHERE name="minsizetoprocessnfo";
+
+-- Days
+UPDATE settings SET value=1 WHERE name="newgroupdaystoscan";
+
+-- Posts
+UPDATE settings SET value=100000 WHERE name="newgroupmsgstoscan";
+
+-- The number of threads for nfo postprocessing. The max is 16, if you set anything higher it will use 16.
+UPDATE settings SET value=1 WHERE name="nfothreads";
+
+-- Whether to attempt to peek into every release, to see if rar files are password protected.
+UPDATE settings SET value=1 WHERE name="checkpasswordedrar";
+
+-- The time in hours to check for cross-posted releases.
+UPDATE settings SET value=2 WHERE name="crossposttime";
+
+-- The time in hours to wait, since last activity, before releases without parts counts in the subject are are created
+-- Setting this below 2 hours could create incomplete releases.
+UPDATE settings SET value=2 WHERE name="delaytime";
+
+-- Whether to delete releases which are passworded.
+UPDATE settings SET value=1 WHERE name="deletepasswordedrelease";
+
+-- Whether to disable backfill on a group if the target date has been reached.
+UPDATE settings SET value=1 WHERE name="disablebackfillgroup";
+
+-- The maximum number of releases to check per run(threaded script only).
+UPDATE settings SET value=10 WHERE name="fixnamesperrun";
+
+-- The number of threads for fixReleasesNames. This includes md5, nfos and filenames.
+UPDATE settings SET value=1 WHERE name="fixnamethreads";
+
+-- Whether to allow integration with a SAB install and if so what type of integration.
+-- Setting this to integrated also disables NZBGet from being selectable to the user.
+UPDATE settings SET value=2 WHERE name="integrationtype";
+
+-- How many hours to wait before deleting a stuck/broken collection. (This is to prevent the MySQL tables from swelling up.)
+UPDATE settings SET value=48 WHERE name="collection_timeout";
+
+-- Some servers allow headers to be sent over in a compressed format.  If enabled this will use much less bandwidth, but processing times may increase.
+-- If you notice that update binaries or backfill seems to hang, look in htop and see if a group is being processed.
+-- If so, first try disabling compressed headers and let run until it processes the group at least once, then you can re-enable compressed headers.
+UPDATE settings SET value=1 WHERE name="compressedheaders";
+
+-- Levels deep to store the nzb Files.
+UPDATE settings SET value=4 WHERE name="nzbsplitlevel";
+
+-- The number of threads for Grab NZBs.
+UPDATE settings SET value=1 WHERE name="nzbthreads";
+
+-- Whether to attempt to repair parts or not, increases backfill/binaries updating time.
+UPDATE settings SET value=1 WHERE name="partrepair";
+
+-- Maximum amount of times to try part repair.
+UPDATE settings SET value=3 WHERE name="partrepairmaxtries";
+
+-- The number of hours incomplete parts and binaries will be retained.
+UPDATE settings SET value=72 WHERE name="partretentionhours";
+
+--
+UPDATE settings SET value=300 WHERE name="postdelay";
+
+--
+UPDATE settings SET value=1 WHERE name="postthreadsamazon";
+
+-- The number of threads for additional postprocessing. This includes deep rar inspection, preview and sample creation and nfo processing.
+UPDATE settings SET value=1 WHERE name="postthreads";
+
+-- The number of threads for non-amazon postprocessing. This includes movies, anime and tv lookups.
+UPDATE settings SET value=1 WHERE name="postthreadsnon";
+
+-- Whether to attempt to process a audio sample, they will be up to 30 seconds, in ogg format. You must have ffmpeg for this.
+UPDATE settings SET value=1 WHERE name="processaudiosample";
+
+-- Whether to attempt to retrieve a JPG file while additional post processing, these are usually on XXX releases.
+UPDATE settings SET value=1 WHERE name="processjpg";
+
+-- Whether to attempt to process a video thumbnail image. You must have ffmpeg for this.
+UPDATE settings SET value=1 WHERE name="processthumbnails";
+
+-- Whether to attempt to process a video sample, these videos are very short 1-3 seconds, 100KB on average, in ogv format. You must have ffmpeg for this.
+UPDATE settings SET value=1 WHERE name="processvideos";
+
+-- When going through PAR2 files, add them to the RAR file content list of the NZB.
+UPDATE settings SET value=1 WHERE name="addpar2";
+
+-- The minimum completion % to keep a release. Set to 0 to disable.
+UPDATE settings SET value=90 WHERE name="releasecompletion";
+
+-- Whether to delete releases which are potentially passworded.
+UPDATE settings SET value=0 WHERE name="deletepossiblerelease";
+
+-- Download/process the last rar or zip file(s) to check for a password and get the file names inside?
+UPDATE settings SET value=0 WHERE name="end";
+
+UPDATE tmux SET value=30 WHERE setting="back_timer";
+UPDATE tmux SET value=4 WHERE setting="backfill";
+UPDATE tmux SET value=1 WHERE setting="backfill_days";
+UPDATE tmux SET value=4 WHERE setting="backfill_groups";
+UPDATE tmux SET value=2 WHERE setting="backfill_order";
+UPDATE tmux SET value=100000 WHERE setting="backfill_qty";
+UPDATE tmux SET value=1 WHERE setting="binaries";
+UPDATE tmux SET value=30 WHERE setting="bins_timer";
+UPDATE tmux SET value=0 WHERE setting="bwmng";
+UPDATE tmux SET value=0 WHERE setting="collections_kill";
+UPDATE tmux SET value=1 WHERE setting="console";
+UPDATE tmux SET value=30 WHERE setting="crap_timer";
+UPDATE tmux SET value=900 WHERE setting="defrag_cache";
+UPDATE tmux SET value=3 WHERE setting="dehash";
+UPDATE tmux SET value=30 WHERE setting="dehash_timer";
+UPDATE tmux SET value=0 WHERE setting="fix_crap";
+UPDATE tmux SET value="Disabled" WHERE setting="fix_crap_opt";
+UPDATE tmux SET value=1 WHERE setting="fix_names";
+UPDATE tmux SET value=30 WHERE setting="fix_timer";
+UPDATE tmux SET value=0 WHERE setting="htop";
+UPDATE tmux SET value=1 WHERE setting="import";
+UPDATE tmux SET value=0 WHERE setting="import_bulk";
+UPDATE tmux SET value=50000 WHERE setting="import_count";
+UPDATE tmux SET value=30 WHERE setting="import_timer";
+UPDATE tmux SET value=1 WHERE setting="mytop";
+UPDATE tmux SET value=0 WHERE setting="nfos";
+UPDATE tmux SET value=19 WHERE setting="niceness";
+UPDATE tmux SET value=0 WHERE setting="nmon";
+UPDATE tmux SET value="/var/www/nZEDb/resources/import" WHERE setting="nzbs";
+UPDATE tmux SET value=0 WHERE setting="optimize";
+UPDATE tmux SET value=86400 WHERE setting="optimize_timer";
+UPDATE tmux SET value=0 WHERE setting="patchdb";
+UPDATE tmux SET value=21600 WHERE setting="patchdb_timer";
+UPDATE tmux SET value=3 WHERE setting="post";
+UPDATE tmux SET value=1 WHERE setting="post_amazon";
+UPDATE tmux SET value=300 WHERE setting="post_kill_timer";
+UPDATE tmux SET value=1 WHERE setting="post_non";
+UPDATE tmux SET value=30 WHERE setting="post_timer";
+UPDATE tmux SET value=30 WHERE setting="post_timer_amazon";
+UPDATE tmux SET value=30 WHERE setting="post_timer_non";
+UPDATE tmux SET value=0 WHERE setting="postprocess_kill";
+UPDATE tmux SET value=0 WHERE setting="powerline";
+UPDATE tmux SET value=2 WHERE setting="processupdate";
+UPDATE tmux SET value=1 WHERE setting="progressive";
+UPDATE tmux SET value=30 WHERE setting="rel_timer";
+UPDATE tmux SET value=1 WHERE setting="releases";
+UPDATE tmux SET value=0 WHERE setting="releases_threaded";
+UPDATE tmux SET value=1 WHERE setting="run_ircscraper";
+UPDATE tmux SET value=0 WHERE setting="run_sharing";
+UPDATE tmux SET value=1 WHERE setting="running";
+UPDATE tmux SET value=30 WHERE setting="seq_timer";
+UPDATE tmux SET value=0 WHERE setting="sequential";
+UPDATE tmux SET value=60 WHERE setting="sharing_timer";
+UPDATE tmux SET value=0 WHERE setting="showprocesslist";
+UPDATE tmux SET value=0 WHERE setting="showquery";
+UPDATE tmux SET value=0 WHERE setting="sorter";
+UPDATE tmux SET value=30 WHERE setting="sorter_timer";
+UPDATE tmux SET value=0 WHERE setting="tcptrack";
+UPDATE tmux SET value="-i eth0 port 443" WHERE setting="tcptrack_args";
+UPDATE tmux SET value="nZEDb" WHERE setting="tmux_session";
+UPDATE tmux SET value=43200 WHERE setting="tv_timer";
+UPDATE tmux SET value=0 WHERE setting="update_tv";
+UPDATE tmux SET value=0 WHERE setting="vnstat";
+UPDATE tmux SET value=0 WHERE setting="write_logs";
+UPDATE tmux SET value=1 WHERE setting="console";
+UPDATE tmux SET value=30 WHERE setting="crap_timer";
+UPDATE tmux SET value=900 WHERE setting="defrag_cache";
+UPDATE tmux SET value=3 WHERE setting="dehash";
+UPDATE tmux SET value=30 WHERE setting="dehash_timer";
+UPDATE tmux SET value=0 WHERE setting="fix_crap";
+UPDATE tmux SET value="Disabled" WHERE setting="fix_crap_opt";
+UPDATE tmux SET value=1 WHERE setting="fix_names";
+UPDATE tmux SET value=30 WHERE setting="fix_timer";
+UPDATE tmux SET value=0 WHERE setting="htop";
+UPDATE tmux SET value=1 WHERE setting="import";
+UPDATE tmux SET value=0 WHERE setting="import_bulk";
+UPDATE tmux SET value=50000 WHERE setting="import_count";
+UPDATE tmux SET value=30 WHERE setting="import_timer";
+UPDATE tmux SET value=300 WHERE setting="monitor_delay";
+UPDATE tmux SET value=1 WHERE setting="mytop";
+UPDATE tmux SET value=0 WHERE setting="nfos";
+UPDATE tmux SET value=19 WHERE setting="niceness";
+UPDATE tmux SET value=0 WHERE setting="nmon";
+UPDATE tmux SET value="/var/www/nZEDb/resources/import" WHERE setting="nzbs";
+UPDATE tmux SET value=0 WHERE setting="optimize";
+UPDATE tmux SET value=86400 WHERE setting="optimize_timer";
+UPDATE tmux SET value=0 WHERE setting="patchdb";
+UPDATE tmux SET value=21600 WHERE setting="patchdb_timer";
+UPDATE tmux SET value=3 WHERE setting="post";
+UPDATE tmux SET value=1 WHERE setting="post_amazon";
+UPDATE tmux SET value=300 WHERE setting="post_kill_timer";
+UPDATE tmux SET value=1 WHERE setting="post_non";
+UPDATE tmux SET value=30 WHERE setting="post_timer";
+UPDATE tmux SET value=30 WHERE setting="post_timer_amazon";
+UPDATE tmux SET value=30 WHERE setting="post_timer_non";
+UPDATE tmux SET value=0 WHERE setting="postprocess_kill";
+UPDATE tmux SET value=0 WHERE setting="powerline";
+UPDATE tmux SET value=2 WHERE setting="processupdate";
+UPDATE tmux SET value=1 WHERE setting="progressive";
+UPDATE tmux SET value=30 WHERE setting="rel_timer";
+UPDATE tmux SET value=1 WHERE setting="releases";
+UPDATE tmux SET value=0 WHERE setting="releases_threaded";
+UPDATE tmux SET value=1 WHERE setting="run_ircscraper";
+UPDATE tmux SET value=0 WHERE setting="run_sharing";
+UPDATE tmux SET value=1 WHERE setting="running";
+UPDATE tmux SET value=30 WHERE setting="seq_timer";
+UPDATE tmux SET value=0 WHERE setting="sequential";
+UPDATE tmux SET value=60 WHERE setting="sharing_timer";
+UPDATE tmux SET value=0 WHERE setting="showprocesslist";
+UPDATE tmux SET value=0 WHERE setting="showquery";
+UPDATE tmux SET value=0 WHERE setting="sorter";
+UPDATE tmux SET value=30 WHERE setting="sorter_timer";
+UPDATE tmux SET value=0 WHERE setting="tcptrack";
+UPDATE tmux SET value="-i eth0 port 443" WHERE setting="tcptrack_args";
+UPDATE tmux SET value="nZEDb" WHERE setting="tmux_session";
+UPDATE tmux SET value=43200 WHERE setting="tv_timer";
+UPDATE tmux SET value=0 WHERE setting="update_tv";
+UPDATE tmux SET value=0 WHERE setting="vnstat";
+UPDATE tmux SET value=0 WHERE setting="write_logs";
