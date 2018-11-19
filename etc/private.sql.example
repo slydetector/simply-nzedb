@@ -1,8 +1,13 @@
+-- Delete any of the lines that you don't require. Most are simply the defaults anyway.
+-- They are only here for reference to simplify docker builds for custom installs.
+
+
 -- The API key used for access to TMDb. (32 character hash)
 UPDATE settings SET value="" WHERE name="tmdbkey";
 
 -- The Fanart.tv api key. Used for Fanart.tv lookups. (32 character hash)
--- Fanart.tv would appreciate it if you use this service to help them out by adding high quality images not already available on TMDB.
+-- Fanart.tv would appreciate it if you use this service to help them out by adding high quality images not already
+-- available on TMDB.
 UPDATE settings SET value="" WHERE name="fanarttvkey";
 
 -- The Trakt.tv API v2 Client ID (SHA256 hash - 64 characters long string). Used for movie and tv lookups.

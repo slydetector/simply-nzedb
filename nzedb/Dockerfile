@@ -33,8 +33,6 @@ RUN apk add --update \
   && \
   rm -rf /var/cache/apk/*
 
-# vnstat in testing repo
-
 # mytop + deps
 RUN apk add --update \
   mariadb \
@@ -94,17 +92,12 @@ RUN mkdir -p /var/log/nginx && \
     chmod 777 /tmp && \
     touch /var/log/nginx/nginx-error.log
 
-# Clone nZEDb and set directory permissions
+# Clone nZEDb and set directory permissions.  set NZEDB_VERSION to "dev" if you want to clone the dev branch.
 ENV NZEDB_VERSION "v0.8.12.0"
-# currently cloning my dev version instead of the original: git checkout --quiet --force $NZEDB_VERSION && \
 RUN mkdir -p /var/www && \
   cd /var/www && \
-  # the following is a personal fork for testing out different ideas.  Replace with your own fork if desired.
-  # git clone https://github.com/pl77/nZEDb.git && \
   git clone https://github.com/nZEDb/nZEDb.git && \
   cd /var/www/nZEDb && \
-  # flip commented line if you wish to use the dev branch instead of 0.8.12.0 release
-  # git checkout --quiet --force dev && \
   git checkout --quiet --force $NZEDB_VERSION && \
   composer install && \
   chmod -R 777 /var/www/nZEDb/ && \
@@ -142,8 +135,9 @@ RUN cd /tmp && \
   git checkout --quiet --force $PHP_ZEPHIR_PARSER_VERSION && \
   ./install && \
   echo "extension=zephir_parser.so" > /etc/php7/conf.d/98_zephir_parser.ini && \
-  # eliminated due to no new php-yenc version for php7.2
+  # Eliminated php-yenc build due to no new php-yenc version for php7.2 at time of commit.
   # default yenc in php 7.2 seems to be very fast anyway so no real problem with eliminating requirement
+  # left commented lines here in case a new version is created in the future.
   #   cd /tmp && \
   #   git clone https://github.com/niel/php-yenc.git && \
   #   cd php-yenc && \
