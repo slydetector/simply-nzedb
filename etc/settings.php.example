@@ -111,7 +111,7 @@ define('nZEDb_RELEASE_SEARCH_TYPE', 0);
  * @note    See misc/sphinxsearch/README.md for installation details.
  * @default '0'
  */
-define('nZEDb_SPHINXQL_HOST_NAME', '0');
+define('nZEDb_SPHINXQL_HOST_NAME', 'sphinx');
 
 /**
  * This is the port to the SphinxQL server (mysql41 protocol).

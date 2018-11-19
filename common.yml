@@ -33,7 +33,6 @@ services:
     restart: unless-stopped
     ports:
       - 8800:8800
-      - 8443:8443 # for sphinx
     env_file:
       - $PWD/etc/simply_nzedb.conf
 

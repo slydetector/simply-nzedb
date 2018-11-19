@@ -118,15 +118,42 @@ See [UPGRADE.md](https://github.com/slydetector/simply-nzedb/blob/master/UPGRADE
 If after an upgrade, ```make attach``` fails, it is usually an indication that the database is getting updated or running migration steps. Use ```make logs | less -R``` to check on the progress and try again in a few minutes.
 
 ## Customizing MySQL
-You can customize mysql settings by creating ```data/etc_mysql_conf.d/nzedb.cnf```. e.g.
+You can customize mysql by modifying the ```etc/nzedb.cnf``` file. 
+For example:
 ```
 [mysqld]
 key_buffer_size = 2G
 innodb_buffer_pool_size = 8G
 group_concat_max_len = 32768
+innodb_file_per_table = 1
 ```
+Be warned, you can do more harm than good by randomly uncommenting lines and increasing values.  Regardless of how
+beefy your server might be, many of those values are closely related to other values in that list, and by increasing 
+them you run the risk of saturating your connection pool and/or starving your server of necessary resources.
 
-## Accessing Adminer
+You are strongly encouraged to read the MariaDB documentation before adjusting the cnf file:
+https://mariadb.com/kb/en/library/configuring-mariadb-with-mycnf/
+https://mariadb.com/kb/en/library/server-system-variables/
+
+## Prepopulating the database with API keys, settings, etc 
+You can customize mysql settings by creating ```data/etc_mysql_conf.d/nzedb.cnf```. e.g.
+```
+# Create a copy of the private.sql.example file
+$ cp etc/private.sql.example etc/private.sql
+
+# Update the private.sql file with your API keys, backfill settings, and anything else.
+$ vim etc/private.sql
+```
+Most of the settings in `etc/private.sql` are defaults, so although it does not hurt to keep them in you can 
+delete any lines you don't need. 
+Once you've got your installation set up and running the way you like it, open up the `settings` and `tmux` tables 
+in `adminer` and copy the values you've changed into your `private.sql` file.  If you ever need to spin up a docker 
+instance on a new machine all your values will be prepopulated.
+
+## Accessing Adminer and/or phpMyAdmin
+You can access the Adminer database manager via `<your nzedb ip address/url>:8880`.
+If installed, phpMyAdmin would be at `<your nzedb ip address/url>:9800`.
+
 Docker networking works slightly different than traditional networking. 
 When accessing Adminer (or phpMyAdmin or other addons), the host is `database`, not `localhost`. 
 The database is `nzedb` and the user is either `root` or `nzedb`.
