@@ -4,12 +4,12 @@ bin/stop_nzedb
 chmod -R 777 /dev/shm
 mkdir -p /dev/shm/unrar
 chmod -R 777 /dev/shm/unrar
-ln -sfn /dev/shm/unrar/ /home/glen/nzedb/data/tmp/
+ln -sfn /dev/shm/unrar/ data/tmp/
 mkdir -p /dev/shm/yEnc
 chmod -R 777 /dev/shm/yEnc
-ln -sfn /dev/shm/yEnc/ /home/glen/nzedb/data/tmp/
+ln -sfn /dev/shm/yEnc/ data/tmp/
 mkdir -p /dev/shm/mysql
 chmod -R 777 /dev/shm/mysql
-ln -sfn /dev/shm/mysql/ /home/glen/nzedb/data/tmp/
-chmod -R 777 /home/glen/nzedb/data/tmp/
+ln -sfn /dev/shm/mysql/ data/tmp/
+chmod -R 777 data/tmp/
 venv/bin/docker-compose up -d
