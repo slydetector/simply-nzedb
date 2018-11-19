@@ -55,13 +55,22 @@ max_connections            = 300
 connect_timeout            = 5
 wait_timeout               = 500
 max_allowed_packet         = 128M
-#  thread_cache_size       = 256
+thread_cache_size          = 256
+thread_handling            = pool-of-threads
+thread_pool_max_threads    = 65536
 #  sort_buffer_size        = 4M
 #  bulk_insert_buffer_size = 32M
-#  tmp_table_size          = 64M
+tmp_table_size             = 64M
 #  max_heap_table_size     = 64M
 interactive_timeout        = 14400
 performance_schema
+
+# MariaDB 10.2 modifies the sql mode to include STRICT_TRANS_TABLES, ERROR_FOR_DIVISION_BY_ZERO.
+# STRICT_TRANS_TABLES results in errors for nZEDb, need to remove setting.
+
+sql_mode                   = NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION
+innodb_strict_mode         = OFF
+
 #
 #
 #  * MyISAM
