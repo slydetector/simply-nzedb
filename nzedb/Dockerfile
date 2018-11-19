@@ -99,9 +99,13 @@ ENV NZEDB_VERSION "v0.8.12.0"
 # currently cloning my dev version instead of the original: git checkout --quiet --force $NZEDB_VERSION && \
 RUN mkdir -p /var/www && \
   cd /var/www && \
-  git clone https://github.com/pl77/nZEDb.git && \
+  # the following is a personal fork for testing out different ideas.  Replace with your own fork if desired.
+  # git clone https://github.com/pl77/nZEDb.git && \
+  git clone https://github.com/nZEDb/nZEDb.git && \
   cd /var/www/nZEDb && \
-  git checkout --quiet --force dev && \
+  # flip commented line if you wish to use the dev branch instead of 0.8.12.0 release
+  # git checkout --quiet --force dev && \
+  git checkout --quiet --force $NZEDB_VERSION && \
   composer install && \
   chmod -R 777 /var/www/nZEDb/ && \
   # nuke all git repos' .git dir except for nzedb's .git dir to save space
