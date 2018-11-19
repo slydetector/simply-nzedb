@@ -1,4 +1,4 @@
-FROM alpine:3.7
+FROM alpine:3.8
 MAINTAINER theslydetector@gmail.com
 
 # Configure Timezone
@@ -31,8 +31,6 @@ RUN apk add --update \
   && \
   rm -rf /var/cache/apk/*
 
-# vnstat in testing repo
-
 # mytop + deps
 RUN apk add --update \
   mariadb \
@@ -40,13 +38,26 @@ RUN apk add --update \
   perl-dbd-mysql \
   perl-term-readkey \
   && \
-  rm -rf /var/cache/apk/*
+  rm -rf /var/cache/apk/* && \
+  # Alpine 3.8 no longer includes mytop, must build from scratch \
+  cd /tmp && \
+  curl -o mytop.tar.gz http://jeremy.zawodny.com/mysql/mytop/mytop-1.6.tar.gz && \
+  tar -zxvf mytop.tar.gz && \
+  cd mytop-1.6 && \
+  perl Makefile.PL && \
+  make && \
+  make test && \
+  make install
+
+# See https://github.com/docker-library/php/issues/240#issuecomment-305038173
+RUN apk add --no-cache --repository https://dl-4.alpinelinux.org/alpine/edge/testing gnu-libiconv
+ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
 
 # Install composer
 RUN curl https://getcomposer.org/installer | php7 -- --install-dir=/usr/bin --filename=composer
 
-# Build and install mediainfo
-ENV MEDIAINFO_VERSION 18.05
+# Build and install mediainfo with newest version
+ENV MEDIAINFO_VERSION 18.08
 RUN apk --update add gcc g++ && \
   mkdir -p /tmp && \
   cd /tmp && \
@@ -83,8 +94,8 @@ RUN mkdir -p /var/log/nginx && \
     chmod 777 /tmp && \
     touch /var/log/nginx/nginx-error.log
 
-# Clone nZEDb and set directory permissions
-ENV NZEDB_VERSION "v0.8.7.0"
+# Clone nZEDb and set directory permissions.  set NZEDB_VERSION to "dev" if you want to clone the dev branch.
+ENV NZEDB_VERSION "v0.8.12.0"
 RUN mkdir -p /var/www && \
   cd /var/www && \
   git clone https://github.com/nZEDb/nZEDb.git && \
@@ -97,7 +108,7 @@ RUN mkdir -p /var/www && \
   # nuke ~350MB of composer cache
   composer clear-cache
 
-# Build tmux 2.0 since tmux 2.2 has issues: https://github.com/nZEDb/nZEDb/issues/2182 
+# Build tmux 2.0 since tmux 2.2 has issues: https://github.com/nZEDb/nZEDb/issues/2182
 ENV TMUX_VERSION 2.0
 RUN apk --update add gcc g++ ncurses-dev libevent-dev bsd-compat-headers && \
   mkdir -p /tmp/tmux && \
@@ -126,11 +137,14 @@ RUN cd /tmp && \
   git checkout --quiet --force $PHP_ZEPHIR_PARSER_VERSION && \
   ./install && \
   echo "extension=zephir_parser.so" > /etc/php7/conf.d/98_zephir_parser.ini && \
-  cd /tmp && \
-  git clone https://github.com/niel/php-yenc.git && \
-  cd php-yenc && \
-  /tmp/zephir/vendor/bin/zephir install && \
-  echo "extension=yenc.so" > /etc/php7/conf.d/99_yenc.ini && \
+  # Eliminated php-yenc build due to no new php-yenc version for php7.2 at time of commit.
+  # default yenc in php 7.2 seems to be very fast anyway so no real problem with eliminating requirement
+  # left commented lines here in case a new version is created in the future.
+  #   cd /tmp && \
+  #   git clone https://github.com/niel/php-yenc.git && \
+  #   cd php-yenc && \
+  #   /tmp/zephir/vendor/bin/zephir install && \
+  #   echo "extension=yenc.so" > /etc/php7/conf.d/99_yenc.ini && \
   composer clear-cache && \
   cd /tmp && \
   rm -rf zephir php-yenc php-zephir-parser && \
@@ -142,7 +156,7 @@ RUN apk --update add gcc autoconf automake g++ python-dev openssl-dev libffi-dev
   git clone https://github.com/Parchive/par2cmdline.git /tmp/par2 && \
   cd /tmp/par2 && \
   git checkout --quiet --force $PAR2_VERSION && \
-  ./automake.sh && \ 
+  ./automake.sh && \
   ./configure --prefix=/usr && \
   make && \
   make install && \
@@ -165,7 +179,8 @@ RUN mv /bin/gzip /bin/gzip.real && \
 # iconv has issues in musl which affects NFO conversion to include
 # cool ascii chars. Remove the problematic parts - TRANSLIT and IGNORE
 # See https://github.com/slydetector/simply-nzedb/issues/31
-RUN sed -i "s|UTF-8//IGNORE//TRANSLIT|UTF-8|g" /var/www/nZEDb/nzedb/utility/Text.php
+# --Eliminated due to iconv updated above
+# RUN sed -i "s|UTF-8//IGNORE//TRANSLIT|UTF-8|g" /var/www/nZEDb/nzedb/utility/Text.php
 
 LABEL nzedb=$NZEDB_VERSION \
   maintainer=theslydetector@gmail.com \

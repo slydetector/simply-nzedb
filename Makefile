@@ -12,7 +12,9 @@ help:
 	@echo "  help - print this help"
 	@echo "  logs - print container logs"
 	@echo "  mysql - mysql client"
+	@echo "  mysqlroot - mysql client logged in as root"
 	@echo "  mysqltuner - run mysql tuner"
+	@echo "  mysqlupgrade - migrate older mysql database to newer version"
 	@echo "  pull - pull the latest version"
 	@echo "  restore - restore last database backup. nzedb must be running"
 	@echo "  shell - shell into the nzedb container"
@@ -41,8 +43,14 @@ logs:
 mysql:
 	@bin/mysql
 
+mysqlroot:
+	@bin/mysqlroot
+
 mysqltuner:
 	@bin/mysqltuner
+
+mysqlupgrade:
+	@bin/mysqlupgrade
 
 pull:
 	@$(COMPOSE) pull

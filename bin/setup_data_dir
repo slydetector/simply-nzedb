@@ -23,7 +23,8 @@ elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
     echo "Windows not supported. Submit a pull request :)"
     exit 1
 fi
-
+# https://stackoverflow.com/questions/7648328/getting-sed-error
+# solution is to change the delimiter for the socket entry
 $sed "s/changeme_nntp_username/${NNTP_USERNAME}/g" $target
 $sed "s/changeme_nntp_password/${NNTP_PASSWORD}/g" $target
 $sed "s/changeme_nntp_server/${NNTP_SERVER}/g" $target
@@ -33,7 +34,7 @@ $sed "s/changeme_nntp_sslenabled/${NNTP_SSLENABLED}/g" $target
 $sed "s/changeme_db_system/${DB_SYSTEM}/g" $target
 $sed "s/changeme_db_host/${DB_HOST}/g" $target
 $sed "s/changeme_db_port/${DB_PORT}/g" $target
-$sed "s/changeme_db_socket/${DB_SOCKET}/g" $target
+$sed "s?changeme_db_socket?${DB_SOCKET}?g" $target
 $sed "s/changeme_db_user/${DB_USER}/g" $target
 $sed "s/changeme_db_password/${DB_PASSWORD}/g" $target
 $sed "s/changeme_db_name/${DB_NAME}/g" $target
@@ -50,6 +51,7 @@ $sed "s/changeme_db_port/${DB_PORT}/g" $target
 $sed "s/changeme_db_user/${DB_USER}/g" $target
 $sed "s/changeme_db_password/${DB_PASSWORD}/g" $target
 $sed "s/changeme_db_name/${DB_NAME}/g" $target
+$sed "s?changeme_db_socket?${DB_SOCKET}?g" $target
 
 mkdir -p data/covers/anime
 mkdir -p data/covers/audio
@@ -64,19 +66,23 @@ mkdir -p data/covers/tvshows
 mkdir -p data/covers/video
 mkdir -p data/nzb
 mkdir -p data/tmp/unrar
+# eliminate message about missing permissions on yEnc
+mkdir -p data/tmp/yEnc
 mkdir -p data/etc_mysql_conf.d
 mkdir -p data/var_lib_mysql
 mkdir -p data/log
 mkdir -p data/import/inbox
 mkdir -p data/db_backups
 
-# Create as files otherwise docker will mount as directories 
+# Create as files otherwise docker will mount as directories
 touch data/log/nginx-access.log
 touch data/log/nginx-error.log
 touch data/log/php_errors.log
+touch data/log/php_errors_cli.log
 touch data/log/php_errors_web.log
 touch data/log/php-fpm.log
 
+cp etc/nzedb.cnf data/etc_mysql_conf.d/nzedb.cnf
 # File that lets mysql container know user id/gid on host
 cat << EOF > data/mysql_user
 PUID=$($id_user)
@@ -87,7 +93,7 @@ EOF
 # Written by predb_import_daily_batch.php
 touch data/predb_progress.txt
 
-# irc scraper 
+# irc scraper
 target="data/configuration/ircscraper_settings.php"
 cp etc/ircscraper_settings_example.php $target
 $sed "s/changeme_irc_username/${IRC_USERNAME}/g" $target
@@ -103,4 +109,5 @@ $sed "s/changeme_socks_host/${SOCKS_HOST}/g" data/proxychains.conf
 $sed "s/changeme_socks_port/${SOCKS_PORT}/g" data/proxychains.conf
 
 chmod -R 777 data
+chmod -R 755 data/etc_mysql_conf.d
 echo Done

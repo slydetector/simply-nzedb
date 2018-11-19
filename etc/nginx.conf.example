@@ -20,7 +20,7 @@ http {
   client_max_body_size 2G;
   
   server {
-    server_name   changeme_server_name localhost;  
+    server_name   changeme_server_name localhost;  # I have to manually set this after installation
     #listen       [::]:80; #uncomment for IPv6 support
     listen       8800;
     

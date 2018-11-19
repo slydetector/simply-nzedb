@@ -1,13 +1,24 @@
-version: '2'
+version: '2.1'
 services:
 
   database:
     image: slydetector/simply-nzedb-mariadb
     restart: unless-stopped
+    container_name: nzedb_mysql
     volumes:
       - $PWD/data/var_lib_mysql:/var/lib/mysql
-      - $PWD/data/etc_mysql_conf.d:/etc/mysql/conf.d
       - $PWD/data/mysql_user:/mysql_user
+      - $PWD/data/etc_mysql_conf.d:/etc/mysql/conf.d
+      #- sock:/var/run/mysqld
+      - $PWD/data/tmp/mysql:/tmp
+    # With MariaDB >= 10.2, the following healthcheck allows for delayed starts until the database is ready.
+    # This is useful when utilizing a sock file for communication between nZEDb and MariaDB.
+    #healthcheck:
+    #  test: "/usr/bin/mysql --user=nzedb --password=nzedb --execute \"SHOW DATABASES;\""
+    #  # test: "/usr/local/mysql/bin/mysql --user=foo --password=foo --execute \"SHOW DATABASES;\""
+    #  interval: 3s
+    #  timeout: 1s
+    #  retries: 5
     environment:
       - MYSQL_ROOT_PASSWORD=nzedb
       - MYSQL_DATABASE=nzedb
@@ -17,40 +28,56 @@ services:
       - "3306"
 
   nzedb:
+    container_name: nzedb
     image: slydetector/simply-nzedb
     restart: unless-stopped
     ports:
       - 8800:8800
-    env_file: 
+    env_file:
       - $PWD/etc/simply_nzedb.conf
+
     volumes:
-      - $PWD/data/covers:/var/www/nZEDb/resources/covers/
-      - $PWD/data/nzb:/var/www/nZEDb/resources/nzb/
-      - $PWD/data/tmp:/var/www/nZEDb/resources/tmp/unrar/
       # configuration/ is expected to contain
       #  - config.php
       #  - ircscraper_settings.php
       #  - settings.php
       #  - install.lock (only after setup has completed)
-      - $PWD/data/configuration:/var/www/nZEDb/configuration/
+      - $PWD/data/configuration:/var/www/nZEDb/configuration
       - $PWD/data/log/nginx-error.log:/var/log/nginx/nginx-error.log
       - $PWD/data/log/nginx-access.log:/var/log/nginx/access.log
       - $PWD/data/log/php-fpm.log:/var/log/php-fpm.log
       - $PWD/data/log/php_errors.log:/var/www/nZEDb/resources/logs/php_errors.log
+      - $PWD/data/log/php_errors_cli.log:/var/www/nZEDb/resources/logs/php_errors_cli.log
       - $PWD/data/log/php_errors_web.log:/var/www/nZEDb/resources/logs/php_errors_web.log
       - $PWD/data/nginx.conf:/etc/nginx/nginx.conf
       - $PWD/data/mytop:/root/.mytop
+      - $PWD/data/tmp/unrar:/var/www/nZEDb/resources/tmp/unrar
+      - $PWD/data/tmp/yEnc:/var/www/nZEDb/resources/tmp/yEnc
+      #- sock:/run/mysqld
       - $PWD/data/predb_progress.txt:/var/www/nZEDb/cli/data/predb_progress.txt
-      - $PWD/data/import:/var/www/nZEDb/resources/import/
       - $PWD/data/proxychains.conf:/etc/proxychains/proxychains.conf
+      - $PWD/etc/bashrc:/root/.bashrc
+      - $PWD/data/covers:/var/www/nZEDb/resources/covers
+      - $PWD/data/nzb:/var/www/nZEDb/resources/nzb
       - $PWD/data/db_backups:/db_backups
+      - $PWD/data/sphinxsearch:/var/lib/sphinxsearch/
+      - $PWD/data/import:/var/www/nZEDb/resources/import
 
   adminer:
+    container_name: nzedb_adminer
     image: clue/adminer
     restart: unless-stopped
-    ports: 
+    ports:
       - 8880:80
 
   redis:
-    image: redis:3.2.6-alpine
+    container_name: nzedb_redis
+    image: redis:alpine
     restart: unless-stopped
+
+  phpmyadmin:
+    container_name: nzedb_phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    restart: unless-stopped
+    ports:
+      - 9800:80

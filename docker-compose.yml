@@ -1,4 +1,6 @@
-version: '2'
+version: '2.1'
+# newer docker-compose version allows for conditional start orders.
+# Unfortunately, this is only working with MariaDB 10.2 and higher.
 services:
 
   database:
@@ -15,19 +17,32 @@ services:
       - redis
     depends_on:
       - database
+        #condition: service_healthy
       - redis
+        #condition: service_started
 
   adminer:
     extends:
       file: common.yml
       service: adminer
-    links: 
+    links:
       - database:db
     depends_on:
       - database
+        # condition: service_healthy
 
   redis:
     extends:
       file: common.yml
       service: redis
-    
+
+
+  phpmyadmin:
+    extends:
+      file: common.yml
+      service: phpmyadmin
+    links:
+      - database:db
+    depends_on:
+      - database
+        # condition: service_healthy

@@ -4,3 +4,4 @@ host=changeme_db_host
 db=changeme_db_name
 delay=1
 port=changeme_db_port
+socket=changeme_db_socket

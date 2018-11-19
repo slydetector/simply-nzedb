@@ -4,4 +4,5 @@
 touch etc/simply_nzedb.conf
 # Use dev.yml instead of docker-compose.yml so the images are built
 # locally instead of pulled from hub.docker.com
-venv/bin/docker-compose --file dev.yml build --pull --force-rm "$@"
+venv/bin/docker-compose --file dev.yml build --pull --force-rm --parallel "$@"
+# added --parallel for quicker container builds
