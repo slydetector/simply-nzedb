@@ -126,6 +126,11 @@ innodb_buffer_pool_size = 8G
 group_concat_max_len = 32768
 ```
 
+## Accessing Adminer
+Docker networking works slightly different than traditional networking. 
+When accessing Adminer (or phpMyAdmin or other addons), the host is `database`, not `localhost`. 
+The database is `nzedb` and the user is either `root` or `nzedb`.
+
 ## TODO
 - PreDB auto-population
 
