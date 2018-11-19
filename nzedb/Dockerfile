@@ -42,8 +42,8 @@ RUN apk add --update \
   perl-dbd-mysql \
   perl-term-readkey \
   && \
-  # Alpine 3.8 no longer includes mytop, must build from scratch \
   rm -rf /var/cache/apk/* && \
+  # Alpine 3.8 no longer includes mytop, must build from scratch \
   cd /tmp && \
   curl -o mytop.tar.gz http://jeremy.zawodny.com/mysql/mytop/mytop-1.6.tar.gz && \
   tar -zxvf mytop.tar.gz && \
@@ -81,7 +81,7 @@ RUN pip install --upgrade pip && \
 # Configure PHP
 RUN sed -ri 's/(max_execution_time =) ([0-9]+)/\1 120/' /etc/php7/php.ini && \
   sed -ri "s/(memory_limit =) (.*$)/\1 -1/" /etc/php7/php.ini && \
-  sed -ri 's/;(date.timezone =)/\1 America\/Toronto/' /etc/php7/php.ini && \
+  sed -ri 's/;(date.timezone =)/\1 America\/Chicago/' /etc/php7/php.ini && \
   sed -ri 's/listen\s*=\s*127.0.0.1:9000/listen = 9000/g' /etc/php7/php-fpm.d/www.conf && \
   sed -ri 's|;include_path = ".:/php/includes"|include_path = ".:/usr/share/php7"|g' /etc/php7/php.ini && \
   mkdir -p /var/log/php-fpm/
@@ -139,11 +139,12 @@ RUN cd /tmp && \
   ./install && \
   echo "extension=zephir_parser.so" > /etc/php7/conf.d/98_zephir_parser.ini && \
   # eliminated due to no new php-yenc version for php7.2
-  #cd /tmp && \
-  #git clone https://github.com/niel/php-yenc.git && \
-  #cd php-yenc && \
-  #/tmp/zephir/vendor/bin/zephir install && \
-  #echo "extension=yenc.so" > /etc/php7/conf.d/99_yenc.ini && \
+  # default yenc in php 7.2 seems to be very fast anyway so no real problem with eliminating requirement
+  #   cd /tmp && \
+  #   git clone https://github.com/niel/php-yenc.git && \
+  #   cd php-yenc && \
+  #   /tmp/zephir/vendor/bin/zephir install && \
+  #   echo "extension=yenc.so" > /etc/php7/conf.d/99_yenc.ini && \
   composer clear-cache && \
   cd /tmp && \
   rm -rf zephir php-yenc php-zephir-parser && \
