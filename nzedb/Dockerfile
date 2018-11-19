@@ -49,6 +49,10 @@ RUN apk add --update \
   make test && \
   make install
 
+# See https://github.com/docker-library/php/issues/240#issuecomment-305038173
+RUN apk add --no-cache --repository https://dl-4.alpinelinux.org/alpine/edge/testing gnu-libiconv
+ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
+
 # Install composer
 RUN curl https://getcomposer.org/installer | php7 -- --install-dir=/usr/bin --filename=composer
 
@@ -175,7 +179,8 @@ RUN mv /bin/gzip /bin/gzip.real && \
 # iconv has issues in musl which affects NFO conversion to include
 # cool ascii chars. Remove the problematic parts - TRANSLIT and IGNORE
 # See https://github.com/slydetector/simply-nzedb/issues/31
-RUN sed -i "s|UTF-8//IGNORE//TRANSLIT|UTF-8|g" /var/www/nZEDb/nzedb/utility/Text.php
+# --Eliminated due to iconv updated above
+# RUN sed -i "s|UTF-8//IGNORE//TRANSLIT|UTF-8|g" /var/www/nZEDb/nzedb/utility/Text.php
 
 LABEL nzedb=$NZEDB_VERSION \
   maintainer=theslydetector@gmail.com \
