@@ -36,6 +36,9 @@ $ vim etc/simply_nzedb.conf
 # Setup the ./data dir which contains nzedb config, nzbs, mysql data, log files, etc
 $ bin/setup_data_dir
 
+# Build the image(s) - Optional, but recommended for latest version.
+$ [sudo] make build 
+
 # Start up nzedb to do initial setup
 $ [sudo] make start 
 ```
