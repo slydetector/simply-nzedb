@@ -17,8 +17,6 @@ RUN apk add --update \
   lame less \
   make mariadb-client memcached musl \
   nginx \
-  # in case you wanted sphinx later \
-  sphinx \
   p7zip php7-ctype php7-curl php7-dev php7-exif php7-fpm php7-gd php7-iconv \
   php7-imagick php7-json php7-mcrypt php7-opcache php7-openssl php7-pcntl \
   php7-pdo php7-pdo_mysql php7-pear php7-phar php7-posix php7-redis \
@@ -184,9 +182,6 @@ LABEL nzedb=$NZEDB_VERSION \
   url=https://github.com/slydetector/simply-nzedb
 
 RUN mkdir -p /var/www/nZEDb/resources/tmp && chmod 777 /var/www/nZEDb/resources/tmp
-# for running sphinx later
-RUN mkdir -p /var/lib/sphinxsearch/data && mkdir -p /var/run/sphinxsearch && mkdir -p /var/log/sphinxsearch
-
 
 ENV TERM tmux
 EXPOSE 8800

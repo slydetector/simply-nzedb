@@ -73,7 +73,6 @@ mkdir -p data/var_lib_mysql
 mkdir -p data/log
 mkdir -p data/import/inbox
 mkdir -p data/db_backups
-mkdir -p data/sphinxsearch/data
 
 # Create as files otherwise docker will mount as directories
 touch data/log/nginx-access.log
@@ -82,7 +81,7 @@ touch data/log/php_errors.log
 touch data/log/php_errors_cli.log
 touch data/log/php_errors_web.log
 touch data/log/php-fpm.log
-touch data/log/searchd.log
+
 cp etc/nzedb.cnf data/etc_mysql_conf.d/nzedb.cnf
 # File that lets mysql container know user id/gid on host
 cat << EOF > data/mysql_user
