@@ -1,4 +1,6 @@
 version: '2.1'
+# newer docker-compose version allows for conditional start orders.
+# Unfortunately, this is only working with MariaDB 10.2 and higher.
 services:
 
   database:

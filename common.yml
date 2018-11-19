@@ -11,6 +11,8 @@ services:
       - $PWD/data/etc_mysql_conf.d:/etc/mysql/conf.d
       #- sock:/var/run/mysqld
       - $PWD/data/tmp/mysql:/tmp
+    # With MariaDB >= 10.2, the following healthcheck allows for delayed starts until the database is ready.
+    # This is useful when utilizing a sock file for communication between nZEDb and MariaDB.
     #healthcheck:
     #  test: "/usr/bin/mysql --user=nzedb --password=nzedb --execute \"SHOW DATABASES;\""
     #  # test: "/usr/local/mysql/bin/mysql --user=foo --password=foo --execute \"SHOW DATABASES;\""
